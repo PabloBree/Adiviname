@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">JuegoElectiva</string>
+    <string name="Iniciar_str">Iniciar juego</string>
+    <string name="Empty_str">Empty</string>
+</resources>
