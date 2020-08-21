@@ -9,12 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        <activity android:name=".ConfiguracionActivity"></activity>
+        <activity android:name=".ConfiguracionActivity" />
         <activity android:name=".PuntajesActivity" />
         <activity android:name=".InstruccionesActivity" />
         <activity android:name=".JugarActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
