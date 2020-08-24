@@ -45,11 +45,6 @@ public class IntroActivity extends AppCompatActivity {
         });
     }
 
-    //JAJAJAKSKSJSJS
-    //KDKDKDKDKDKDKA
-    //kkeekmfkmemfeemfkefm
-    //Lucho
-
     private void abrir_main(){
         // abre activity main
         Intent intent = new Intent(this, MainActivity.class);

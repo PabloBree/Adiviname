@@ -9,12 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".ConfiguracionActivity" />
-        <activity android:name=".PuntajesActivity" />
-        <activity android:name=".InstruccionesActivity" />
-        <activity android:name=".JugarActivity" />
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".IntroActivity">
+        <activity android:name=".ConfiguracionActivity"
+            android:screenOrientation="landscape"/>
+
+        <activity android:name=".PuntajesActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".InstruccionesActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".JugarActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".IntroActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
