@@ -27,7 +27,7 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intro);
 
         // CODIGO PARA REPRODUCIR VIDEO EN LA APP
-        String videoPath = "android.resource://com.lugopa.juegoelectiva/"+ R.raw.video_intro;
+        String videoPath = "android.resource://com.lugopa.juegoelectiva/"+ R.raw.video_intro_particulas;
         Uri uri = Uri.parse(videoPath);
         videoView = findViewById(R.id.videoView_intro);
         videoView.setVideoURI(uri);
