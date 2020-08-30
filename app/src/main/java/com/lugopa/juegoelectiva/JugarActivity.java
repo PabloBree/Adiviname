@@ -61,6 +61,12 @@ public class JugarActivity extends AppCompatActivity {
         //numberPicker.setOnValueChangedListener(this);
     }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
     /*
     @Override
     public void onValueChange(NumberPicker numberPicker, int i, int i1) {

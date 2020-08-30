@@ -55,16 +55,22 @@ public class MainActivity extends AppCompatActivity {
         btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //salir();
+                finish();
+                System.exit(0);
             }
         });
-
         /*btnSeleccionarDatos!!.setOnClickListener() {   // PARA ABRIR ACTIVITY - PASAR A JAVA
             intent: Intent = Intent(this, SeleccionDatosCalculos::class.java)
             intent.putExtra("mUsuario", mUsuario) // paso el usuario de Firebase
             startActivity(intent)
             // Permite dirigirnos a la activity de la seleccion de los datos a mostrar
         }*/
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void inicializar(){
@@ -80,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, JugarActivity.class);
         //intent.putExtra( lo que queramos pasar) // para pasar cosas a la activity
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void abrir_instrucciones(){
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InstruccionesActivity.class);
         //intent.putExtra( lo que queramos pasar) // para pasar cosas a la activity
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void abrir_configuracion(){
@@ -94,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ConfiguracionActivity.class);
         //intent.putExtra( lo que queramos pasar) // para pasar cosas a la activity
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void abrir_puntajes(){
@@ -101,11 +110,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PuntajesActivity.class);
         //intent.putExtra( lo que queramos pasar) // para pasar cosas a la activity
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    private void salir(){
-        // DEBERIA CERRAR LA APP o la sesion
-    }
-    
 
 }

@@ -50,6 +50,7 @@ public class IntroActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         //intent.putExtra( lo que queramos pasar) // para pasar cosas a la activity
         startActivity(intent);
+        overridePendingTransition(R.anim.long_fade_in, R.anim.long_fade_out);
         finish();
     }
 
