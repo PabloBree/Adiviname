@@ -11,87 +11,80 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="459dp"
-        android:layout_height="251dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:baselineAligned="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:baselineAligned="false">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/LinearLayout1_sub"
-            android:layout_width="0dp"
-            android:layout_height="237dp"
+        <NumberPicker
+            android:id="@+id/numberPicker0"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="32dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:paddingLeft="50dp"
-            android:paddingTop="10dp"
-            android:paddingRight="50dp">
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints,NestedWeights" />
 
-            <NumberPicker
-                android:id="@+id/numberPicker0"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_marginStart="32dp"
-                android:layout_weight="1"
-                android:theme="@style/NumberPickerTheme"
-                tools:ignore="MissingConstraints,NestedWeights" />
+        <NumberPicker
+            android:id="@+id/numberPicker1"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="28dp"
+            android:layout_weight="1"
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints" />
 
-            <NumberPicker
-                android:id="@+id/numberPicker1"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_marginStart="28dp"
-                android:layout_weight="1"
-                android:theme="@style/NumberPickerTheme"
-                tools:ignore="MissingConstraints" />
+        <NumberPicker
+            android:id="@+id/numberPicker2"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="28dp"
+            android:layout_weight="1"
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints" />
 
-            <NumberPicker
-                android:id="@+id/numberPicker2"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_marginStart="28dp"
-                android:layout_weight="1"
-                android:theme="@style/NumberPickerTheme"
-                tools:ignore="MissingConstraints" />
-
-            <NumberPicker
-                android:id="@+id/numberPicker3"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_marginStart="61dp"
-                android:layout_weight="1"
-                android:theme="@style/NumberPickerTheme"
-                tools:ignore="MissingConstraints" />
-        </LinearLayout>
+        <NumberPicker
+            android:id="@+id/numberPicker3"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="61dp"
+            android:layout_weight="1"
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="456dp"
-        android:layout_height="271dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+    <Button
+        android:id="@+id/button_Intento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_weight="1"
+        android:background="#86BC25"
+        android:text="Prueba"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout1" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="460dp"
-        android:layout_height="245dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+    <TextView
+        android:id="@+id/textViewNumeros"
+        android:layout_width="182dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="36dp"
+        android:background="#86BC25"
+        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        android:orientation="horizontal" />
+        app:layout_constraintTop_toBottomOf="@+id/button_Intento" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
