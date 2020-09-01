@@ -4,18 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InstruccionesActivity"
-    android:background="#FAFAFA">
+    android:background="#FAFAFA"
+    tools:context=".InstruccionesActivity">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView_titulo_instrucciones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ESTAS EN ACTIVITY INSTRUCCIONES"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="92dp"
+        android:text="INSTRUCCIONES:"
+        android:textColor="#DE000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_instrucciones"
+        android:layout_width="315dp"
+        android:layout_height="339dp"
+        android:layout_marginTop="40dp"
+        android:text="Adiviname es un juego donde tienes que utilizar tu logica para adivinar un numero secreto de 4 digitos que nuestro sistema escoge al comienzo de la partida. El numero esta formado por digitos del 0 al 9 pero debe cumplir con las siguientes restricciones: \n 1) No puede comenzar con el numero '0' (cero)\n 2) No se puede repetir ningun digito\n\n El objetivo entonces sera el de adivinar el numero en la menor cantidad de intentos y prestando atencion a los mensajes que te indicaran cuantos numeros CORRECTOS hay (su valor y su posicion estan bien) y cuantos numeros REGULARES hay (su valor esta bien pero su posicion no) y ademas te mostrara un registro de tus intentos pevios\n\n Mucha suerte y a poner a trabajar esas neuronas!!!&quot;"
+        android:textColor="#DE000000"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_titulo_instrucciones" />
+
+    <Button
+        android:id="@+id/button_regresasr_instrucciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/button_green_rounded"
+        android:text="Regresar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_instrucciones" />
 </androidx.constraintlayout.widget.ConstraintLayout>

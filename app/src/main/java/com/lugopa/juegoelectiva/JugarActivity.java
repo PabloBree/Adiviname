@@ -3,11 +3,14 @@ package com.lugopa.juegoelectiva;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.icu.text.UnicodeSetSpanner;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import java.util.List;
 
 
 public class JugarActivity extends AppCompatActivity {
@@ -103,13 +106,41 @@ public class JugarActivity extends AppCompatActivity {
                 arrayNumeros[2]= numberPicker2.getValue();
                 arrayNumeros[3]= numberPicker3.getValue();
 
-                int numero = Integer.valueOf(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
+                int numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
+                String str_num = Integer.toString(numero);
+                if(validar_numero(str_num)){
+                    tvNumeros.setText(str_num);
+                }else {
+                    tvNumeros.setText("Error - Digitos repetidos");
+                }
 
-                tvNumeros.setText(Integer.toString(numero));
             }
         });
     }
 
+    private boolean validar_numero(String numero){
+        // Iterate over characters of a String
+        // using simple for loop
+        boolean es_valido = true;
+        for (int i = 0; i < numero.length(); i++) {
+            char digito = numero.charAt(i);
+            for(int j = i+1; j < numero.length(); j++){
+                if(digito == numero.charAt((j))){
+                    es_valido = false;
+                    break;
+                }
+            }
+            if(!es_valido) {
+                break;
+            }
+        }
+        return es_valido;
+    }
+
+
+//    private List<Integer> actualizar_lista_intentos(int numero, List<Integer> lista){
+//
+//    }
 
 
     /*
