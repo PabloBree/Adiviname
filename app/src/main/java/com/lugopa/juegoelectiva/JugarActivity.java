@@ -91,8 +91,8 @@ public class JugarActivity extends AppCompatActivity {
       //Numero Pickers definition
       numberPicker = findViewById(R.id.numberPicker0);
       numberPicker1 = findViewById(R.id.numberPicker1);
-      numberPicker1 = findViewById(R.id.numberPicker2);
-      numberPicker1 = findViewById(R.id.numberPicker3);
+      numberPicker2 = findViewById(R.id.numberPicker2);
+      numberPicker3 = findViewById(R.id.numberPicker3);
     }
 
     private void oprimir_boton(){
