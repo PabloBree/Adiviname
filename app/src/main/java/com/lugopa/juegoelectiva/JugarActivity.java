@@ -11,6 +11,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Random;
 
 
 public class JugarActivity extends AppCompatActivity {
@@ -121,9 +122,10 @@ public class JugarActivity extends AppCompatActivity {
     private boolean validar_numero(String numero){
         // Iterate over characters of a String
         // using simple for loop
+        char digito;
         boolean es_valido = true;
         for (int i = 0; i < numero.length(); i++) {
-            char digito = numero.charAt(i);
+             digito = numero.charAt(i);
             for(int j = i+1; j < numero.length(); j++){
                 if(digito == numero.charAt((j))){
                     es_valido = false;
@@ -137,6 +139,18 @@ public class JugarActivity extends AppCompatActivity {
         return es_valido;
     }
 
+    private boolean son_iguales(int a, int b){
+        return a == b; // retorna True o False
+    }
+
+//    private int generar_numero(){  # Tiene que estar entre 1023 y 9876 con extremos incluidos
+//
+//    }
+
+//    private boolean es_correcto(){
+//
+//    }
+
 
 //    private List<Integer> actualizar_lista_intentos(int numero, List<Integer> lista){
 //
@@ -149,6 +163,9 @@ public class JugarActivity extends AppCompatActivity {
         tvShowNumbers.setText("Old Number= "+i+" New Number = "+i1);
     }*/
 
+    private int getRandomNumber(int min,int max) {
+        return (new Random()).nextInt((max - min) + 1) + min;
+    }
 
 
 }
