@@ -109,11 +109,13 @@ public class JugarActivity extends AppCompatActivity {
 
                 int numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
                 String str_num = Integer.toString(numero);
+                
                 if(validar_numero(str_num)){
                     tvNumeros.setText(str_num);
                 }else {
                     tvNumeros.setText("Error - Digitos repetidos");
                 }
+
 
             }
         });
@@ -140,7 +142,7 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private boolean son_iguales(int a, int b){
-        return a == b; // retorna True o False
+        return a == b; /*retorna True o False*/
     }
 
 //    private int generar_numero(){  # Tiene que estar entre 1023 y 9876 con extremos incluidos
@@ -165,6 +167,36 @@ public class JugarActivity extends AppCompatActivity {
 
     private int getRandomNumber(int min,int max) {
         return (new Random()).nextInt((max - min) + 1) + min;
+    }
+
+    private String numeroRandom(){
+        int valor1 = getRandomNumber(1,9);
+        int valor2 = getRandomNumber(0,9);
+        int valor3 = getRandomNumber(0,9);
+        int valor4 = getRandomNumber(0,9);
+
+        while(son_iguales(valor1,valor2)){
+            valor2 = getRandomNumber(0,9);
+        }
+
+        while(son_iguales(valor1,valor3) || son_iguales(valor2,valor3)) {
+            valor3 = getRandomNumber(0,9);
+        }
+
+        while(son_iguales(valor1,valor4) || son_iguales(valor2,valor4) || son_iguales(valor3,valor4)){
+            valor4 = getRandomNumber(0,9);
+        }
+
+        //Para poder concatenar los 4 valores, recomiendan pasar cada uno a string y de ahi concatenarlos, una vez concatenados, se pueden transformar a un unico entero.
+        String prueba1 = String.valueOf(valor1);
+        String prueba2 = String.valueOf(valor2);
+        String prueba3 = String.valueOf(valor3);
+        String prueba4 = String.valueOf(valor4);
+
+        String resu = prueba1 + prueba2 + prueba3 + prueba4;
+
+        return resu;
+
     }
 
 
