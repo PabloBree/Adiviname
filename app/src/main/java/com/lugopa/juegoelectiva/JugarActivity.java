@@ -2,14 +2,18 @@ package com.lugopa.juegoelectiva;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.UnicodeSetSpanner;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -23,6 +27,10 @@ public class JugarActivity extends AppCompatActivity {
     private NumberPicker numberPicker2;
     private NumberPicker numberPicker3;
     private int[] arrayNumeros = new int[4];
+
+    ListView listView;
+    private ArrayList<String> lista = new ArrayList();
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,11 @@ public class JugarActivity extends AppCompatActivity {
         });
 
         //numberPicker.setOnValueChangedListener(this);
+
+        // Manejo de la lista.....
+        listView = (ListView)findViewById(R.id.list_view_intentos);
+        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista);
+
     }
 
     @Override
@@ -112,6 +125,13 @@ public class JugarActivity extends AppCompatActivity {
                 
                 if(validar_numero(str_num)){
                     tvNumeros.setText(str_num);
+                    if(!es_repetido(lista, str_num)){
+                        actualizar_lista_intentos(lista,str_num);
+                        listView.setAdapter(adapter);
+                    }else{ // si el numero ya esta en la lista de intentos, No lo agrego
+                        tvNumeros.setText("==Numero ya intentado==");
+                    }
+
                 }else {
                     tvNumeros.setText("Error - Digitos repetidos");
                 }
@@ -141,23 +161,26 @@ public class JugarActivity extends AppCompatActivity {
         return es_valido;
     }
 
-    private boolean son_iguales(int a, int b){
-        return a == b; /*retorna True o False*/
+
+//    private boolean es_correcto(){ // para determinar si el numero del usuario es igual al generado
+//
+//    }
+
+
+    private void actualizar_lista_intentos(ArrayList<String> lista, String valor){
+        lista.add(valor);
     }
 
-//    private int generar_numero(){  # Tiene que estar entre 1023 y 9876 con extremos incluidos
-//
-//    }
-
-//    private boolean es_correcto(){
-//
-//    }
-
-
-//    private List<Integer> actualizar_lista_intentos(int numero, List<Integer> lista){
-//
-//    }
-
+    private boolean es_repetido(ArrayList<String> lista, String valor){
+        boolean repetido = false;
+        for(String contenido : lista){
+            if(valor.equals(contenido)){
+                repetido = true;
+                break;
+            }
+        }
+        return repetido;
+    }
 
     /*
     @Override
@@ -165,11 +188,15 @@ public class JugarActivity extends AppCompatActivity {
         tvShowNumbers.setText("Old Number= "+i+" New Number = "+i1);
     }*/
 
+    private boolean son_iguales(int a, int b){
+        return a == b; /*retorna True o False*/
+    }
+
     private int getRandomNumber(int min,int max) {
         return (new Random()).nextInt((max - min) + 1) + min;
     }
 
-    private String numeroRandom(){
+    private String gererar_numeroRandom(){
         int valor1 = getRandomNumber(1,9);
         int valor2 = getRandomNumber(0,9);
         int valor3 = getRandomNumber(0,9);
