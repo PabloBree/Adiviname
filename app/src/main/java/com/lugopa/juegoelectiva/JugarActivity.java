@@ -28,6 +28,9 @@ public class JugarActivity extends AppCompatActivity {
     private NumberPicker numberPicker3;
     private int[] arrayNumeros = new int[4];
 
+    // numero random
+    String numero_random;
+
     ListView listView;
     private ArrayList<String> lista = new ArrayList();
     ArrayAdapter<String> adapter;
@@ -110,6 +113,9 @@ public class JugarActivity extends AppCompatActivity {
       numberPicker1 = findViewById(R.id.numberPicker1);
       numberPicker2 = findViewById(R.id.numberPicker2);
       numberPicker3 = findViewById(R.id.numberPicker3);
+
+      numero_random = gererar_numeroRandom(); // asignamos el numero random que debe adivinarse
+        tvNumeros.setText("Generado = "+numero_random);
     }
 
     private void oprimir_boton(){
@@ -125,9 +131,13 @@ public class JugarActivity extends AppCompatActivity {
                 
                 if(validar_numero(str_num)){
                     tvNumeros.setText(str_num);
-                    if(!es_repetido(lista, str_num)){
-                        actualizar_lista_intentos(lista,str_num);
-                        listView.setAdapter(adapter);
+                    if(!es_repetido(lista, str_num)){ // Si el numero NO fue ingresado previamente
+                        if(analizar_intento(str_num, numero_random )){// determina si es o no el numero correcto
+                            lista.clear(); // vacio la lista
+                        }else{
+                            actualizar_lista_intentos(lista,str_num); // agrego el intento a la lista
+                        }
+                        listView.setAdapter(adapter); // actualiso en la UI
                     }else{ // si el numero ya esta en la lista de intentos, No lo agrego
                         tvNumeros.setText("==Numero ya intentado==");
                     }
@@ -162,9 +172,39 @@ public class JugarActivity extends AppCompatActivity {
     }
 
 
-//    private boolean es_correcto(){ // para determinar si el numero del usuario es igual al generado
-//
-//    }
+    private boolean analizar_intento(String intento, String numeroGenerado ){ // para determinar si el numero del usuario es igual al generado
+        boolean adivinado = false;
+        if(son_iguales(Integer.parseInt(intento), Integer.parseInt(numeroGenerado))){ // si son iguales, adivino el numero
+            tvNumeros.setText("FELICITACIONES!!! numero adivinado");
+            adivinado = true;
+        }else{
+            tvNumeros.setText("Correctos: "+buscar_correctos(intento, numeroGenerado)+" Regulares: "+buscar_regulares(intento,numeroGenerado));
+        }
+        return adivinado;
+    }
+
+    private int buscar_regulares(String intento, String numeroGenerado){
+        char num_intento;
+        int contador_regulares = 0;
+        for (int i=0; i < intento.length(); i++){
+             num_intento = intento.charAt(i);
+             for (int j=0; j < numeroGenerado.length(); j++){
+                 if (num_intento == numeroGenerado.charAt(j) && j != i){ // si son iguales y NO estan en la misma posicion
+                     contador_regulares++;
+                 }
+             }
+        }
+        return contador_regulares;
+    }
+
+    private int buscar_correctos(String intento, String numeroGenerado) {
+        int contador_correctos = 0;
+        for (int i=0; i < intento.length(); i++)
+            if(intento.charAt(i) == numeroGenerado.charAt(i)){ // si estan en la misma posicion y son iguales
+                contador_correctos++;
+            }
+        return contador_correctos;
+    }
 
 
     private void actualizar_lista_intentos(ArrayList<String> lista, String valor){
