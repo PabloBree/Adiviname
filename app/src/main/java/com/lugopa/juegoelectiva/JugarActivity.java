@@ -32,7 +32,8 @@ public class JugarActivity extends AppCompatActivity {
     String numero_random;
 
     ListView listView;
-    private ArrayList<String> lista = new ArrayList();
+    private ArrayList<String> lista_intentos = new ArrayList();
+    private ArrayList<String> lista_intentos_descripcion = new ArrayList();
     ArrayAdapter<String> adapter;
 
     @Override
@@ -92,9 +93,7 @@ public class JugarActivity extends AppCompatActivity {
 
         //numberPicker.setOnValueChangedListener(this);
 
-        // Manejo de la lista.....
-        listView = (ListView)findViewById(R.id.list_view_intentos);
-        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista);
+
 
     }
 
@@ -105,17 +104,21 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private void inicializar(){
-      btnIntento = findViewById(R.id.button_Intento);
-      tvNumeros = findViewById(R.id.textViewNumeros);
+        btnIntento = findViewById(R.id.button_Intento);
+        tvNumeros = findViewById(R.id.textViewNumeros);
 
-      //Numero Pickers definition
-      numberPicker = findViewById(R.id.numberPicker0);
-      numberPicker1 = findViewById(R.id.numberPicker1);
-      numberPicker2 = findViewById(R.id.numberPicker2);
-      numberPicker3 = findViewById(R.id.numberPicker3);
+        //Numero Pickers definition
+        numberPicker = findViewById(R.id.numberPicker0);
+        numberPicker1 = findViewById(R.id.numberPicker1);
+        numberPicker2 = findViewById(R.id.numberPicker2);
+        numberPicker3 = findViewById(R.id.numberPicker3);
 
-      numero_random = gererar_numeroRandom(); // asignamos el numero random que debe adivinarse
-        tvNumeros.setText("Generado = "+numero_random);
+        numero_random = gererar_numeroRandom(); // asignamos el numero random que debe adivinarse
+        tvNumeros.setText("Generado = "+ numero_random);
+
+        // Manejo de la lista.....
+        listView = findViewById(R.id.list_view_intentos);
+        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_intentos_descripcion);
     }
 
     private void oprimir_boton(){
@@ -129,23 +132,7 @@ public class JugarActivity extends AppCompatActivity {
                 int numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
                 String str_num = Integer.toString(numero);
                 
-                if(validar_numero(str_num)){
-                    tvNumeros.setText(str_num);
-                    if(!es_repetido(lista, str_num)){ // Si el numero NO fue ingresado previamente
-                        if(analizar_intento(str_num, numero_random )){// determina si es o no el numero correcto
-                            lista.clear(); // vacio la lista
-                        }else{
-                            actualizar_lista_intentos(lista,str_num); // agrego el intento a la lista
-                        }
-                        listView.setAdapter(adapter); // actualiso en la UI
-                    }else{ // si el numero ya esta en la lista de intentos, No lo agrego
-                        tvNumeros.setText("==Numero ya intentado==");
-                    }
-
-                }else {
-                    tvNumeros.setText("Error - Digitos repetidos");
-                }
-
+                analizar_intento(str_num, numero_random);
 
             }
         });
@@ -172,14 +159,32 @@ public class JugarActivity extends AppCompatActivity {
     }
 
 
-    private boolean analizar_intento(String intento, String numeroGenerado ){ // para determinar si el numero del usuario es igual al generado
+    private boolean analizar_intento(String num_intento, String num_generado ){ // para determinar si el numero del usuario es igual al generado
         boolean adivinado = false;
-        if(son_iguales(Integer.parseInt(intento), Integer.parseInt(numeroGenerado))){ // si son iguales, adivino el numero
-            tvNumeros.setText("FELICITACIONES!!! numero adivinado");
-            adivinado = true;
-        }else{
-            tvNumeros.setText("Correctos: "+buscar_correctos(intento, numeroGenerado)+" Regulares: "+buscar_regulares(intento,numeroGenerado));
+        if(validar_numero(num_intento)){ // si el numero cumple los parametros
+            tvNumeros.setText(num_intento);
+            if(!es_repetido(lista_intentos, num_intento)){ // Si el numero NO fue ingresado previamente
+                boolean iguales = son_iguales(Integer.parseInt(num_intento), Integer.parseInt(num_generado));
+                if(iguales){ // si son iguales, EL NUMERO FUE ADIVINADO
+                    adivinado = true;
+                    tvNumeros.setText("FELICITACIONES!!! numero adivinado");
+                    lista_intentos.clear(); // vacio la lista de numeros
+                    lista_intentos_descripcion.clear(); // vacio la lista con las descripciones
+                }else{ // Si NO son iguales, el numero no fue adivinado y debe agregarse a la lista de intentos
+                    int cant_regulares = buscar_regulares(num_intento, num_generado);
+                    int cant_correctos = buscar_correctos(num_intento, num_generado);
+                    tvNumeros.setText("Correctos: "+ cant_correctos +" Regulares: "+ cant_regulares);
+                    actualizar_lista(lista_intentos_descripcion,num_intento + " --> Correctos: "+ cant_correctos+" Regulares: "+ cant_regulares); // agrego el intento a la lista
+                    actualizar_lista(lista_intentos, num_intento);
+                    listView.setAdapter(adapter);
+                }
+            }else{ // Si el numero ya fue ingresado
+                tvNumeros.setText("==Numero ya intentado==");
+            }
+        }else { // si el numero no cumple los parametros
+            tvNumeros.setText("Error - Digitos repetidos");
         }
+        // retorno un booleano
         return adivinado;
     }
 
@@ -207,7 +212,7 @@ public class JugarActivity extends AppCompatActivity {
     }
 
 
-    private void actualizar_lista_intentos(ArrayList<String> lista, String valor){
+    private void actualizar_lista(ArrayList<String> lista, String valor){
         lista.add(valor);
     }
 
