@@ -1,11 +1,13 @@
 package com.lugopa.juegoelectiva;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.UnicodeSetSpanner;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,11 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.content.DialogInterface;
 
 public class JugarActivity extends AppCompatActivity {
 
     private Button btnIntento;
+    private Button btnAbandonar;
     private TextView tvNumeros;
+    private TextView numeroadivinado;
     private NumberPicker numberPicker;
     private NumberPicker numberPicker1;
     private NumberPicker numberPicker2;
@@ -46,7 +51,14 @@ public class JugarActivity extends AppCompatActivity {
         btnIntento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                oprimir_boton();
+                oprimir_boton_Intentar();
+            }
+        });
+
+        btnAbandonar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                oprimir_boton_Abandonar();
             }
         });
 
@@ -92,9 +104,6 @@ public class JugarActivity extends AppCompatActivity {
         });
 
         //numberPicker.setOnValueChangedListener(this);
-
-
-
     }
 
     @Override
@@ -105,6 +114,7 @@ public class JugarActivity extends AppCompatActivity {
 
     private void inicializar(){
         btnIntento = findViewById(R.id.button_Intento);
+        btnAbandonar = findViewById(R.id.button_Abandonar);
         tvNumeros = findViewById(R.id.textViewNumeros);
 
         //Numero Pickers definition
@@ -113,7 +123,7 @@ public class JugarActivity extends AppCompatActivity {
         numberPicker2 = findViewById(R.id.numberPicker2);
         numberPicker3 = findViewById(R.id.numberPicker3);
 
-        numero_random = gererar_numeroRandom(); // asignamos el numero random que debe adivinarse
+        numero_random = generar_numeroRandom(); // asignamos el numero random que debe adivinarse
         tvNumeros.setText("Generado = "+ numero_random);
 
         // Manejo de la lista.....
@@ -121,7 +131,7 @@ public class JugarActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_intentos_descripcion);
     }
 
-    private void oprimir_boton(){
+    private void oprimir_boton_Intentar(){
         btnIntento.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 arrayNumeros[0]= numberPicker.getValue();
@@ -131,11 +141,56 @@ public class JugarActivity extends AppCompatActivity {
 
                 int numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
                 String str_num = Integer.toString(numero);
-                
-                analizar_intento(str_num, numero_random);
 
+                analizar_intento(str_num, numero_random);
             }
         });
+    }
+
+    private void oprimir_boton_Abandonar(){
+        btnAbandonar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            mostrarDialogAbandonar();
+            }
+        });
+    }
+
+    private void mostrarDialogAbandonar(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(JugarActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_abandonar,null);
+        builder.setView(view).setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        numeroadivinado = view.findViewById(R.id.text_numero_adivinado); //Hizo falta aclarar la view para que no rompa, se mezclaban las vistas y rompía
+        numeroadivinado.setText("El número era "+ numero_random);
+
+        Button btn_jugardevuelta = view.findViewById(R.id.btn_jugardevuelta);
+        Button btn_salir = view.findViewById(R.id.btn_salir);
+
+        btn_jugardevuelta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inicializar();
+                adapter.clear();
+                listView.setAdapter(null);
+                numberPicker.setValue(1);
+                numberPicker1.setValue(0);
+                numberPicker2.setValue(0);
+                numberPicker3.setValue(0);
+                dialog.cancel();
+            }
+        });
+
+        btn_salir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     private boolean validar_numero(String numero){
@@ -143,10 +198,14 @@ public class JugarActivity extends AppCompatActivity {
         // using simple for loop
         char digito;
         boolean es_valido = true;
+
         for (int i = 0; i < numero.length(); i++) {
+
              digito = numero.charAt(i);
             for(int j = i+1; j < numero.length(); j++){
+
                 if(digito == numero.charAt((j))){
+
                     es_valido = false;
                     break;
                 }
@@ -160,17 +219,26 @@ public class JugarActivity extends AppCompatActivity {
 
 
     private boolean analizar_intento(String num_intento, String num_generado ){ // para determinar si el numero del usuario es igual al generado
+
         boolean adivinado = false;
+
         if(validar_numero(num_intento)){ // si el numero cumple los parametros
+
             tvNumeros.setText(num_intento);
+
             if(!es_repetido(lista_intentos, num_intento)){ // Si el numero NO fue ingresado previamente
+
                 boolean iguales = son_iguales(Integer.parseInt(num_intento), Integer.parseInt(num_generado));
+
                 if(iguales){ // si son iguales, EL NUMERO FUE ADIVINADO
+
                     adivinado = true;
                     tvNumeros.setText("FELICITACIONES!!! numero adivinado");
                     lista_intentos.clear(); // vacio la lista de numeros
                     lista_intentos_descripcion.clear(); // vacio la lista con las descripciones
+
                 }else{ // Si NO son iguales, el numero no fue adivinado y debe agregarse a la lista de intentos
+
                     int cant_regulares = buscar_regulares(num_intento, num_generado);
                     int cant_correctos = buscar_correctos(num_intento, num_generado);
                     tvNumeros.setText("Correctos: "+ cant_correctos +" Regulares: "+ cant_regulares);
@@ -179,9 +247,11 @@ public class JugarActivity extends AppCompatActivity {
                     listView.setAdapter(adapter);
                 }
             }else{ // Si el numero ya fue ingresado
+
                 tvNumeros.setText("==Numero ya intentado==");
             }
         }else { // si el numero no cumple los parametros
+
             tvNumeros.setText("Error - Digitos repetidos");
         }
         // retorno un booleano
@@ -189,11 +259,16 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private int buscar_regulares(String intento, String numeroGenerado){
+
         char num_intento;
         int contador_regulares = 0;
+
         for (int i=0; i < intento.length(); i++){
+
              num_intento = intento.charAt(i);
+
              for (int j=0; j < numeroGenerado.length(); j++){
+
                  if (num_intento == numeroGenerado.charAt(j) && j != i){ // si son iguales y NO estan en la misma posicion
                      contador_regulares++;
                  }
@@ -203,23 +278,30 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private int buscar_correctos(String intento, String numeroGenerado) {
+
         int contador_correctos = 0;
+
         for (int i=0; i < intento.length(); i++)
+
             if(intento.charAt(i) == numeroGenerado.charAt(i)){ // si estan en la misma posicion y son iguales
+
                 contador_correctos++;
             }
         return contador_correctos;
     }
-
 
     private void actualizar_lista(ArrayList<String> lista, String valor){
         lista.add(valor);
     }
 
     private boolean es_repetido(ArrayList<String> lista, String valor){
+
         boolean repetido = false;
+
         for(String contenido : lista){
+
             if(valor.equals(contenido)){
+
                 repetido = true;
                 break;
             }
@@ -241,7 +323,8 @@ public class JugarActivity extends AppCompatActivity {
         return (new Random()).nextInt((max - min) + 1) + min;
     }
 
-    private String gererar_numeroRandom(){
+    private String generar_numeroRandom(){
+
         int valor1 = getRandomNumber(1,9);
         int valor2 = getRandomNumber(0,9);
         int valor3 = getRandomNumber(0,9);
