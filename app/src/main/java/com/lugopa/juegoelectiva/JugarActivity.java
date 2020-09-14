@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.UnicodeSetSpanner;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class JugarActivity extends AppCompatActivity {
 
     private Button btnIntento;
     private Button btnAbandonar;
+    private Button btnJugarDeNuevo;
     private TextView tvNumeros;
     private TextView numeroadivinado;
     private NumberPicker numberPicker;
@@ -46,11 +48,14 @@ public class JugarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jugar);
 
+        //final MediaPlayer buttonSoundMP = MediaPlayer.create(this, R.raw.button_sound);
+
         inicializar();
 
         btnIntento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //buttonSoundMP.start();
                 oprimir_boton_Intentar();
             }
         });
@@ -58,7 +63,16 @@ public class JugarActivity extends AppCompatActivity {
         btnAbandonar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //buttonSoundMP.start();
                 oprimir_boton_Abandonar();
+            }
+        });
+
+        btnJugarDeNuevo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //buttonSoundMP.start();
+                jugarDeNuevo();
             }
         });
 
@@ -115,6 +129,7 @@ public class JugarActivity extends AppCompatActivity {
     private void inicializar(){
         btnIntento = findViewById(R.id.button_Intento);
         btnAbandonar = findViewById(R.id.button_Abandonar);
+        btnJugarDeNuevo = findViewById(R.id.button_JugarDeNuevo);
         tvNumeros = findViewById(R.id.textViewNumeros);
 
         //Numero Pickers definition
@@ -173,13 +188,7 @@ public class JugarActivity extends AppCompatActivity {
         btn_jugardevuelta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inicializar();
-                adapter.clear();
-                listView.setAdapter(null);
-                numberPicker.setValue(1);
-                numberPicker1.setValue(0);
-                numberPicker2.setValue(0);
-                numberPicker3.setValue(0);
+                jugarDeNuevo();
                 dialog.cancel();
             }
         });
@@ -191,6 +200,20 @@ public class JugarActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void jugarDeNuevo(){
+        inicializar();
+        adapter.clear();
+        listView.setAdapter(null);
+        numberPicker.setValue(1);
+        numberPicker1.setValue(0);
+        numberPicker2.setValue(0);
+        numberPicker3.setValue(0);
+        btnJugarDeNuevo.setVisibility(View.INVISIBLE);
+        btnJugarDeNuevo.setClickable(false);
+        btnAbandonar.setVisibility(View.VISIBLE);
+        btnAbandonar.setClickable(true);
     }
 
     private boolean validar_numero(String numero){
@@ -236,7 +259,11 @@ public class JugarActivity extends AppCompatActivity {
                     tvNumeros.setText("FELICITACIONES!!! numero adivinado");
                     lista_intentos.clear(); // vacio la lista de numeros
                     lista_intentos_descripcion.clear(); // vacio la lista con las descripciones
-
+                    listView.setAdapter(adapter);
+                    btnJugarDeNuevo.setClickable(true);
+                    btnJugarDeNuevo.setVisibility(View.VISIBLE);
+                    btnAbandonar.setVisibility(View.INVISIBLE);
+                    btnAbandonar.setClickable(false);
                 }else{ // Si NO son iguales, el numero no fue adivinado y debe agregarse a la lista de intentos
 
                     int cant_regulares = buscar_regulares(num_intento, num_generado);

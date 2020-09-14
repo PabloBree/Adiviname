@@ -77,7 +77,7 @@
     <TextView
         android:id="@+id/textViewNumeros"
         android:layout_width="195dp"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:background="@drawable/textbox_encuadrado"
         android:gravity="center"
@@ -91,7 +91,7 @@
         android:id="@+id/list_view_intentos"
         android:layout_width="320dp"
         android:layout_height="140dp"
-        android:layout_marginTop="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_Abandonar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,15 +103,28 @@
         android:id="@+id/button_Abandonar"
         android:layout_width="196dp"
         android:layout_height="33dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginBottom="100dp"
         android:layout_weight="1"
         android:background="@drawable/button_green_rounded"
         android:text="Abandonar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_view_intentos" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-
+    <Button
+        android:id="@+id/button_JugarDeNuevo"
+        android:layout_width="196dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="56dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_green_rounded"
+        android:text="Jugar de nuevo"
+        android:visibility="invisible"
+        android:clickable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
