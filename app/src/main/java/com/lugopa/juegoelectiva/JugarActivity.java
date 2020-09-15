@@ -48,14 +48,14 @@ public class JugarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jugar);
 
-        //final MediaPlayer buttonSoundMP = MediaPlayer.create(this, R.raw.button_sound);
+        final MediaPlayer buttonSoundMP = MediaPlayer.create(this, R.raw.button_sound);
 
         inicializar();
 
         btnIntento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //buttonSoundMP.start();
+                buttonSoundMP.start();
                 oprimir_boton_Intentar();
             }
         });
@@ -63,7 +63,7 @@ public class JugarActivity extends AppCompatActivity {
         btnAbandonar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //buttonSoundMP.start();
+                buttonSoundMP.start();
                 oprimir_boton_Abandonar();
             }
         });
@@ -71,7 +71,7 @@ public class JugarActivity extends AppCompatActivity {
         btnJugarDeNuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //buttonSoundMP.start();
+                buttonSoundMP.start();
                 jugarDeNuevo();
             }
         });

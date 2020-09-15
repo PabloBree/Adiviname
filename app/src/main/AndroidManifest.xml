@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".ConfiguracionActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".PuntajesActivity"
             android:screenOrientation="portrait"/>
