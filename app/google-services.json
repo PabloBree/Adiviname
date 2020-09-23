@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1018199282854",
+    "firebase_url": "https://adiviname-8df4f.firebaseio.com",
+    "project_id": "adiviname-8df4f",
+    "storage_bucket": "adiviname-8df4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018199282854:android:00ded79328df753bbdd067",
+        "android_client_info": {
+          "package_name": "com.lugopa.juegoelectiva"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018199282854-35nbe1sa9je9caksmcqev8su046d0uas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpJYAY6RIoBWFXPlyuzsOdE3cSn7yhwt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018199282854-35nbe1sa9je9caksmcqev8su046d0uas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

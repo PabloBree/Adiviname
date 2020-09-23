@@ -22,6 +22,11 @@ import java.util.Random;
 
 import android.content.DialogInterface;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.lugopa.juegoelectiva.Model.Puntaje;
+
+
 public class JugarActivity extends AppCompatActivity {
 
     private Button btnIntento;
@@ -29,11 +34,15 @@ public class JugarActivity extends AppCompatActivity {
     private Button btnJugarDeNuevo;
     private TextView tvNumeros;
     private TextView numeroadivinado;
+    private TextView nombreIngresado;
     private NumberPicker numberPicker;
     private NumberPicker numberPicker1;
     private NumberPicker numberPicker2;
     private NumberPicker numberPicker3;
     private int[] arrayNumeros = new int[4];
+
+    private int contador_intentos = 0;
+
 
     // numero random
     String numero_random;
@@ -43,13 +52,13 @@ public class JugarActivity extends AppCompatActivity {
     private ArrayList<String> lista_intentos_descripcion = new ArrayList();
     ArrayAdapter<String> adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jugar);
 
         final MediaPlayer buttonSoundMP = MediaPlayer.create(this, R.raw.button_sound);
-
         inicializar();
 
         btnIntento.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +211,51 @@ public class JugarActivity extends AppCompatActivity {
 
     }
 
+    private void mostrarDialogVictoria(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(JugarActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_victoria,null);
+        builder.setView(view).setCancelable(false);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        numeroadivinado = view.findViewById(R.id.text_numero_adivinado); //Hizo falta aclarar la view para que no rompa, se mezclaban las vistas y rompía
+        numeroadivinado.setText("El número era "+ numero_random);
+
+        nombreIngresado = view.findViewById(R.id.editText_nombre_ingresado);
+
+        Button btn_jugardevuelta = view.findViewById(R.id.btn_jugardevuelta_v);
+        Button btn_salir = view.findViewById(R.id.btn_salir_v);
+        Button btn_guardar = view.findViewById(R.id.btn_guardar_v);
+
+        btn_jugardevuelta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jugarDeNuevo();
+                dialog.cancel();
+            }
+        });
+
+        btn_salir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btn_guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nom = nombreIngresado.getText().toString();
+                guardarEnBD(nom, "35",  "Facil");
+                dialog.cancel();
+            }
+        });
+
+    }
+
+
     private void jugarDeNuevo(){
         inicializar();
         adapter.clear();
@@ -256,7 +310,7 @@ public class JugarActivity extends AppCompatActivity {
                 if(iguales){ // si son iguales, EL NUMERO FUE ADIVINADO
 
                     adivinado = true;
-                    tvNumeros.setText("FELICITACIONES!!! numero adivinado");
+                    mostrarDialogVictoria();  // ------------------analizar ubicacion en el codigo ------------
                     lista_intentos.clear(); // vacio la lista de numeros
                     lista_intentos_descripcion.clear(); // vacio la lista con las descripciones
                     listView.setAdapter(adapter);
@@ -379,6 +433,12 @@ public class JugarActivity extends AppCompatActivity {
 
         return resu;
 
+    }
+
+    private void guardarEnBD(String nombre, String puntaje, String dificultad){
+        DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
+        Puntaje puntajeBD = new Puntaje(nombre, puntaje, dificultad);
+        mDataBase.child("Usuarios").setValue(puntajeBD);
     }
 
 
