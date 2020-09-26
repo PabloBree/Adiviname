@@ -9,14 +9,14 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="278dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="28dp"
-        android:text="Dificultad:"
+        android:layout_width="306dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="32dp"
+        android:text="Seleccionar dificultad"
         android:textColor="#000000"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.308"
+        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch1" />
 

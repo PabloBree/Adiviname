@@ -13,28 +13,28 @@
         <TextView
             android:id="@+id/text_numero_adivinado"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="42dp"
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/editText_nombre_ingresado"
             android:layout_width="378dp"
             android:layout_height="41dp"
+            android:layout_marginBottom="30dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:autofillHints="Ingrese su nombre"
             android:backgroundTint="@android:color/holo_green_dark"
             android:ems="10"
             android:hint="Ingrese su nombre"
             android:inputType="textPersonName"
-            android:textColor="#DE000000"
-            android:textColorHint="#40FFFFFF"
-            android:layout_marginBottom="30dp" />
+            android:textColor="#DEFFFFFF"
+            android:textColorHint="#40FFFFFF" />
     </LinearLayout>
 
 

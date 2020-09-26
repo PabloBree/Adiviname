@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.icu.text.UnicodeSetSpanner;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,7 +19,9 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import android.content.DialogInterface;
@@ -42,6 +46,7 @@ public class JugarActivity extends AppCompatActivity {
     private int[] arrayNumeros = new int[4];
 
     private int contador_intentos = 0;
+    private int puntuacion;
 
 
     // numero random
@@ -58,13 +63,13 @@ public class JugarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jugar);
 
-        final MediaPlayer buttonSoundMP = MediaPlayer.create(this, R.raw.button_sound);
+        //final MediaPlayer buttonSoundMP = MediaPlayer.create(this, R.raw.button_sound);
         inicializar();
 
         btnIntento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonSoundMP.start();
+                //buttonSoundMP.start();
                 oprimir_boton_Intentar();
             }
         });
@@ -72,7 +77,7 @@ public class JugarActivity extends AppCompatActivity {
         btnAbandonar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonSoundMP.start();
+                //buttonSoundMP.start();
                 oprimir_boton_Abandonar();
             }
         });
@@ -80,7 +85,7 @@ public class JugarActivity extends AppCompatActivity {
         btnJugarDeNuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonSoundMP.start();
+                //buttonSoundMP.start();
                 jugarDeNuevo();
             }
         });
@@ -221,13 +226,13 @@ public class JugarActivity extends AppCompatActivity {
         dialog.show();
 
         numeroadivinado = view.findViewById(R.id.text_numero_adivinado); //Hizo falta aclarar la view para que no rompa, se mezclaban las vistas y rompía
-        numeroadivinado.setText("El número era "+ numero_random);
+        numeroadivinado.setText("Bien hecho! Obtuviste "+ puntuacion +" puntos");
 
         nombreIngresado = view.findViewById(R.id.editText_nombre_ingresado);
 
         Button btn_jugardevuelta = view.findViewById(R.id.btn_jugardevuelta_v);
         Button btn_salir = view.findViewById(R.id.btn_salir_v);
-        Button btn_guardar = view.findViewById(R.id.btn_guardar_v);
+        final Button btn_guardar = view.findViewById(R.id.btn_guardar_v);
 
         btn_jugardevuelta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,17 +253,20 @@ public class JugarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String nom = nombreIngresado.getText().toString();
-                guardarEnBD(nom, "35",  "Facil");
-                dialog.cancel();
+                guardarEnBD(nom, Integer.toString(puntuacion),  "Facil");
+                numeroadivinado.setText("Puntaje guardado exitosamente!!");
+                btn_guardar.setClickable(false);
+                btn_guardar.setBackgroundColor(Color.GRAY);
+                //dialog.cancel();
             }
         });
 
     }
 
-
     private void jugarDeNuevo(){
         inicializar();
         adapter.clear();
+        contador_intentos = 0;
         listView.setAdapter(null);
         numberPicker.setValue(1);
         numberPicker1.setValue(0);
@@ -310,6 +318,7 @@ public class JugarActivity extends AppCompatActivity {
                 if(iguales){ // si son iguales, EL NUMERO FUE ADIVINADO
 
                     adivinado = true;
+                    puntuacion = calcularPuntaje(contador_intentos, "facil"); // ================================ El nivel de dificultad debe obtenerse de la base de datos========================
                     mostrarDialogVictoria();  // ------------------analizar ubicacion en el codigo ------------
                     lista_intentos.clear(); // vacio la lista de numeros
                     lista_intentos_descripcion.clear(); // vacio la lista con las descripciones
@@ -319,7 +328,7 @@ public class JugarActivity extends AppCompatActivity {
                     btnAbandonar.setVisibility(View.INVISIBLE);
                     btnAbandonar.setClickable(false);
                 }else{ // Si NO son iguales, el numero no fue adivinado y debe agregarse a la lista de intentos
-
+                    contador_intentos ++;
                     int cant_regulares = buscar_regulares(num_intento, num_generado);
                     int cant_correctos = buscar_correctos(num_intento, num_generado);
                     tvNumeros.setText("Correctos: "+ cant_correctos +" Regulares: "+ cant_regulares);
@@ -437,11 +446,28 @@ public class JugarActivity extends AppCompatActivity {
 
     private void guardarEnBD(String nombre, String puntaje, String dificultad){
         DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
+        //Map<String, Puntaje> users = new HashMap<>();
         Puntaje puntajeBD = new Puntaje(nombre, puntaje, dificultad);
-        mDataBase.child("Usuarios").setValue(puntajeBD);
+        mDataBase.child("Usuarios").push().setValue(puntajeBD);
     }
 
-
+    private int calcularPuntaje(int contador_intentos, String dificultad){
+        int puntaje_max_facil = 100;
+        int puntaje_max_intermedio = 300;
+        int puntaje_max_dificil = 600;
+        int puntaje_final = 0;
+        switch (dificultad){
+            case "intermedio":
+                puntaje_final = puntaje_max_intermedio - (contador_intentos * 5);
+                break;
+            case "dificil":
+                puntaje_final = puntaje_max_dificil- (contador_intentos * 5);
+                break;
+            default: // seria el nivel FACIL
+                puntaje_final = puntaje_max_facil - (contador_intentos * 5);
+        }
+        return puntaje_final;
+    }
 
 
 }
