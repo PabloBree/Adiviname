@@ -11,6 +11,8 @@ public class Puntaje {
         this.puntaje = p;
         this.dificultad = d;
     }
+    public Puntaje(){
+    }
 
     private void guardarEnBD(){
        // puntuacionesBD.actualizarBD(parametros)

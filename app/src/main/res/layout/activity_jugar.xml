@@ -88,15 +88,17 @@
         app:layout_constraintTop_toBottomOf="@+id/button_Intento" />
 
     <ListView
-        android:id="@+id/list_view_intentos"
+        android:id="@+id/list_view_puntajes"
         android:layout_width="320dp"
         android:layout_height="140dp"
         app:layout_constraintBottom_toTopOf="@+id/button_Abandonar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNumeros">
-
+        app:layout_constraintTop_toBottomOf="@+id/textViewNumeros"
+        android:fadeScrollbars="true"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll">
     </ListView>
 
     <Button

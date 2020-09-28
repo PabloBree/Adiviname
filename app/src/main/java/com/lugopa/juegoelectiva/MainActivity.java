@@ -2,8 +2,11 @@ package com.lugopa.juegoelectiva;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_configuracion;
     private Button btn_puntajes;
 
+    // Vibracion y sonido de botones
+    private Vibrator vibe;
+    int duracion = 80;
+    private MediaPlayer soundMP;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
         inicializar(); // obtengo las vistas de UI
 
+        vibe = (Vibrator)MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+        soundMP = MediaPlayer.create(this, R.raw.sonido_boton_click);
+
         btn_jugar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 abrir_jugar();
             }
         });
@@ -35,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         btn_puntajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 abrir_puntajes();
             }
         });
@@ -42,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         btn_instrucciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 abrir_instrucciones();
             }
         });
@@ -49,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         btn_configuracion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 abrir_configuracion();
             }
         });
@@ -56,16 +75,12 @@ public class MainActivity extends AppCompatActivity {
         btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 finish();
                 System.exit(0);
             }
         });
-        /*btnSeleccionarDatos!!.setOnClickListener() {   // PARA ABRIR ACTIVITY - PASAR A JAVA
-            intent: Intent = Intent(this, SeleccionDatosCalculos::class.java)
-            intent.putExtra("mUsuario", mUsuario) // paso el usuario de Firebase
-            startActivity(intent)
-            // Permite dirigirnos a la activity de la seleccion de los datos a mostrar
-        }*/
     }
 
     @Override

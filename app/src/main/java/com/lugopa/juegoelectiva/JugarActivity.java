@@ -3,13 +3,11 @@ package com.lugopa.juegoelectiva;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Color;
-import android.icu.text.UnicodeSetSpanner;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.provider.CalendarContract;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,16 +17,12 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
-import android.content.DialogInterface;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.lugopa.juegoelectiva.Model.Puntaje;
+import com.lugopa.juegoelectiva.Model.VariablesGlobales;
 
 
 public class JugarActivity extends AppCompatActivity {
@@ -47,7 +41,7 @@ public class JugarActivity extends AppCompatActivity {
 
     private int contador_intentos = 0;
     private int puntuacion;
-
+    private String dificultadGlobal;
 
     // numero random
     String numero_random;
@@ -57,19 +51,24 @@ public class JugarActivity extends AppCompatActivity {
     private ArrayList<String> lista_intentos_descripcion = new ArrayList();
     ArrayAdapter<String> adapter;
 
+    // Vibracion y sonido de botones
+    private Vibrator vibe;
+    int duracion = 80;
+    private MediaPlayer soundMP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jugar);
 
-        //final MediaPlayer buttonSoundMP = MediaPlayer.create(this, R.raw.button_sound);
         inicializar();
+
+        vibe = (Vibrator)JugarActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+        soundMP = MediaPlayer.create(this, R.raw.sonido_boton_click);
 
         btnIntento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //buttonSoundMP.start();
                 oprimir_boton_Intentar();
             }
         });
@@ -77,7 +76,6 @@ public class JugarActivity extends AppCompatActivity {
         btnAbandonar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //buttonSoundMP.start();
                 oprimir_boton_Abandonar();
             }
         });
@@ -85,7 +83,6 @@ public class JugarActivity extends AppCompatActivity {
         btnJugarDeNuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //buttonSoundMP.start();
                 jugarDeNuevo();
             }
         });
@@ -156,32 +153,31 @@ public class JugarActivity extends AppCompatActivity {
         tvNumeros.setText("Generado = "+ numero_random);
 
         // Manejo de la lista.....
-        listView = findViewById(R.id.list_view_intentos);
+        listView = findViewById(R.id.list_view_puntajes);
         adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_intentos_descripcion);
+
+        //variable global de dificultad
+        dificultadGlobal = ((VariablesGlobales) this.getApplication()).getDificultad();
     }
 
     private void oprimir_boton_Intentar(){
-        btnIntento.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                arrayNumeros[0]= numberPicker.getValue();
-                arrayNumeros[1]= numberPicker1.getValue();
-                arrayNumeros[2]= numberPicker2.getValue();
-                arrayNumeros[3]= numberPicker3.getValue();
+        soundMP.start();
+        vibe.vibrate(duracion);
+        arrayNumeros[0]= numberPicker.getValue();
+        arrayNumeros[1]= numberPicker1.getValue();
+        arrayNumeros[2]= numberPicker2.getValue();
+        arrayNumeros[3]= numberPicker3.getValue();
 
-                int numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
-                String str_num = Integer.toString(numero);
+        int numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
+        String str_num = Integer.toString(numero);
 
-                analizar_intento(str_num, numero_random);
-            }
-        });
+        analizar_intento(str_num, numero_random);
     }
 
     private void oprimir_boton_Abandonar(){
-        btnAbandonar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-            mostrarDialogAbandonar();
-            }
-        });
+        soundMP.start();
+        vibe.vibrate(duracion);
+        mostrarDialogAbandonar();
     }
 
     private void mostrarDialogAbandonar(){
@@ -202,6 +198,8 @@ public class JugarActivity extends AppCompatActivity {
         btn_jugardevuelta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 jugarDeNuevo();
                 dialog.cancel();
             }
@@ -210,6 +208,8 @@ public class JugarActivity extends AppCompatActivity {
         btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 finish();
             }
         });
@@ -237,6 +237,8 @@ public class JugarActivity extends AppCompatActivity {
         btn_jugardevuelta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 jugarDeNuevo();
                 dialog.cancel();
             }
@@ -245,6 +247,8 @@ public class JugarActivity extends AppCompatActivity {
         btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 finish();
             }
         });
@@ -252,6 +256,8 @@ public class JugarActivity extends AppCompatActivity {
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
                 String nom = nombreIngresado.getText().toString();
                 guardarEnBD(nom, Integer.toString(puntuacion),  "Facil");
                 numeroadivinado.setText("Puntaje guardado exitosamente!!");
@@ -318,7 +324,7 @@ public class JugarActivity extends AppCompatActivity {
                 if(iguales){ // si son iguales, EL NUMERO FUE ADIVINADO
 
                     adivinado = true;
-                    puntuacion = calcularPuntaje(contador_intentos, "facil"); // ================================ El nivel de dificultad debe obtenerse de la base de datos========================
+                    puntuacion = calcularPuntaje(contador_intentos, dificultadGlobal);
                     mostrarDialogVictoria();  // ------------------analizar ubicacion en el codigo ------------
                     lista_intentos.clear(); // vacio la lista de numeros
                     lista_intentos_descripcion.clear(); // vacio la lista con las descripciones
@@ -453,8 +459,8 @@ public class JugarActivity extends AppCompatActivity {
 
     private int calcularPuntaje(int contador_intentos, String dificultad){
         int puntaje_max_facil = 100;
-        int puntaje_max_intermedio = 300;
-        int puntaje_max_dificil = 600;
+        int puntaje_max_intermedio = 200;
+        int puntaje_max_dificil = 300;
         int puntaje_final = 0;
         switch (dificultad){
             case "intermedio":
@@ -466,7 +472,10 @@ public class JugarActivity extends AppCompatActivity {
             default: // seria el nivel FACIL
                 puntaje_final = puntaje_max_facil - (contador_intentos * 5);
         }
-        return puntaje_final;
+        if (puntaje_final < 0){
+            puntaje_final = 0;
+        }
+        return puntaje_final ;
     }
 
 

@@ -11,11 +11,34 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ESTAS EN ACTIVITY JUGAR"
+        android:layout_marginTop="76dp"
+        android:text="Ranking Global"
         android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/list_view_puntajes"
+        android:layout_width="258dp"
+        android:layout_height="425dp"
+        android:fadeScrollbars="true"
+        app:layout_constraintBottom_toTopOf="@+id/button_salir_puntajes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button_salir_puntajes"
+        android:layout_width="153dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="72dp"
+        android:background="@drawable/button_green_rounded"
+        android:text="Salir"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
