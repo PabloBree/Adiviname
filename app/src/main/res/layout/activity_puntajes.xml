@@ -4,8 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PuntajesActivity"
-    android:background="#FAFAFA">
+    android:background="#FAFAFA"
+    android:verticalScrollbarPosition="right"
+    tools:context=".PuntajesActivity">
+
+    <Button
+        android:id="@+id/button_salir_puntajes"
+        android:layout_width="153dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/button_green_rounded"
+        android:text="Salir"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view_puntajes" />
+
+    <ListView
+        android:id="@+id/list_view_puntajes"
+        android:layout_width="309dp"
+        android:layout_height="318dp"
+        android:layout_marginTop="12dp"
+        android:fadeScrollbars="true"
+        android:foregroundGravity="center_horizontal"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical"
+        android:smoothScrollbar="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView"
@@ -19,26 +46,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/list_view_puntajes"
-        android:layout_width="258dp"
-        android:layout_height="425dp"
-        android:fadeScrollbars="true"
-        app:layout_constraintBottom_toTopOf="@+id/button_salir_puntajes"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="310dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="17dp"
+        android:text="Nombre - Dificultad - Puntaje"
+        android:textColor="#DE000000"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/button_salir_puntajes"
-        android:layout_width="153dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="72dp"
-        android:background="@drawable/button_green_rounded"
-        android:text="Salir"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

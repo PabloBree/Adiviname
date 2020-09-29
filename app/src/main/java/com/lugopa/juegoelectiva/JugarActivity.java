@@ -259,7 +259,7 @@ public class JugarActivity extends AppCompatActivity {
                 soundMP.start();
                 vibe.vibrate(duracion);
                 String nom = nombreIngresado.getText().toString();
-                guardarEnBD(nom, Integer.toString(puntuacion),  "Facil");
+                guardarEnBD(nom, Integer.toString(puntuacion),  dificultadGlobal);
                 numeroadivinado.setText("Puntaje guardado exitosamente!!");
                 btn_guardar.setClickable(false);
                 btn_guardar.setBackgroundColor(Color.GRAY);
