@@ -33,11 +33,17 @@ public class JugarActivity extends AppCompatActivity {
     private TextView tvNumeros;
     private TextView numeroadivinado;
     private TextView nombreIngresado;
-    private NumberPicker numberPicker;
+    private NumberPicker numberPicker0;
     private NumberPicker numberPicker1;
     private NumberPicker numberPicker2;
     private NumberPicker numberPicker3;
-    private int[] arrayNumeros = new int[4];
+    private NumberPicker numberPicker4;
+    private NumberPicker numberPicker5;
+    private NumberPicker numberPicker6;
+    private NumberPicker numberPicker7;
+    private NumberPicker numberPicker8;
+    private int[] arrayNumeros = new int[9]; // deberia ser de 9
+    private int largo_dificultad; ////////////////////////////////////////////// TIENE QUE OBTENER SU VALOR SEGUN EL NIVEL DE DIFICULTAD ///////////////////////////
 
     private int contador_intentos = 0;
     private int puntuacion;
@@ -87,8 +93,8 @@ public class JugarActivity extends AppCompatActivity {
             }
         });
 
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(9);
+        numberPicker0.setMinValue(1);
+        numberPicker0.setMaxValue(9);
 
         numberPicker1.setMinValue(0);
         numberPicker1.setMaxValue(9);
@@ -99,8 +105,23 @@ public class JugarActivity extends AppCompatActivity {
         numberPicker3.setMinValue(0);
         numberPicker3.setMaxValue(9);
 
+        numberPicker4.setMinValue(0);
+        numberPicker4.setMaxValue(9);
+
+        numberPicker5.setMinValue(0);
+        numberPicker5.setMaxValue(9);
+
+        numberPicker6.setMinValue(0);
+        numberPicker6.setMaxValue(9);
+
+        numberPicker7.setMinValue(0);
+        numberPicker7.setMaxValue(9);
+
+        numberPicker8.setMinValue(0);
+        numberPicker8.setMaxValue(9);
+
         // to change formate of number in numberpicker
-        numberPicker.setFormatter(new NumberPicker.Formatter() {
+        numberPicker0.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int i) {
                 return String.format("%1d", i);
@@ -128,6 +149,41 @@ public class JugarActivity extends AppCompatActivity {
             }
         });
 
+        numberPicker4.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                return String.format("%1d", i);
+            }
+        });
+
+        numberPicker5.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                return String.format("%1d", i);
+            }
+        });
+
+        numberPicker6.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                return String.format("%1d", i);
+            }
+        });
+
+        numberPicker7.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                return String.format("%1d", i);
+            }
+        });
+
+        numberPicker8.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int i) {
+                return String.format("%1d", i);
+            }
+        });
+
         //numberPicker.setOnValueChangedListener(this);
     }
 
@@ -144,10 +200,19 @@ public class JugarActivity extends AppCompatActivity {
         tvNumeros = findViewById(R.id.textViewNumeros);
 
         //Numero Pickers definition
-        numberPicker = findViewById(R.id.numberPicker0);
+        numberPicker0 = findViewById(R.id.numberPicker0);
         numberPicker1 = findViewById(R.id.numberPicker1);
         numberPicker2 = findViewById(R.id.numberPicker2);
         numberPicker3 = findViewById(R.id.numberPicker3);
+        numberPicker4 = findViewById(R.id.numberPicker4);
+        numberPicker5 = findViewById(R.id.numberPicker5);
+        numberPicker6 = findViewById(R.id.numberPicker6);
+        numberPicker7 = findViewById(R.id.numberPicker7);
+        numberPicker8 = findViewById(R.id.numberPicker8);
+
+        //variable global de dificultad
+        dificultadGlobal = ((VariablesGlobales) this.getApplication()).getDificultad();
+        largo_dificultad = obtenerLargoDificultad();
 
         numero_random = generar_numeroRandom(); // asignamos el numero random que debe adivinarse
         tvNumeros.setText("Generado = "+ numero_random);
@@ -156,21 +221,47 @@ public class JugarActivity extends AppCompatActivity {
         listView = findViewById(R.id.list_view_puntajes);
         adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_intentos_descripcion);
 
-        //variable global de dificultad
-        dificultadGlobal = ((VariablesGlobales) this.getApplication()).getDificultad();
+        set_visualizacion_pickers();
     }
 
     private void oprimir_boton_Intentar(){
         soundMP.start();
         vibe.vibrate(duracion);
-        arrayNumeros[0]= numberPicker.getValue();
-        arrayNumeros[1]= numberPicker1.getValue();
-        arrayNumeros[2]= numberPicker2.getValue();
-        arrayNumeros[3]= numberPicker3.getValue();
-
-        int numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3]));
-        String str_num = Integer.toString(numero);
-
+        //////////////////////////////////////////////////////////////////////////////////// HABRIA QUE HACER UN CASE PARA DETERMINAR QUE VALORES TOMA SEGUN LA VARIAbLE GLOBAL DE DIFICULTAD
+        int numero;
+        String str_num = "000";
+        switch (dificultadGlobal){
+            case "facil":
+                arrayNumeros[0]= numberPicker0.getValue();
+                arrayNumeros[1]= numberPicker1.getValue();
+                arrayNumeros[2]= numberPicker2.getValue();
+                numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2]));
+                str_num = Integer.toString(numero);
+                break;
+            case "intermedio":
+                arrayNumeros[0]= numberPicker0.getValue();
+                arrayNumeros[1]= numberPicker1.getValue();
+                arrayNumeros[2]= numberPicker2.getValue();
+                arrayNumeros[3]= numberPicker3.getValue();
+                arrayNumeros[4]= numberPicker4.getValue();
+                arrayNumeros[5]= numberPicker5.getValue();
+                numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3])+String.valueOf(arrayNumeros[4])+String.valueOf(arrayNumeros[5]));
+                str_num = Integer.toString(numero);
+                break;
+            case "dificil":
+                arrayNumeros[0]= numberPicker0.getValue();
+                arrayNumeros[1]= numberPicker1.getValue();
+                arrayNumeros[2]= numberPicker2.getValue();
+                arrayNumeros[3]= numberPicker3.getValue();
+                arrayNumeros[4]= numberPicker4.getValue();
+                arrayNumeros[5]= numberPicker5.getValue();
+                arrayNumeros[6]= numberPicker6.getValue();
+                arrayNumeros[7]= numberPicker7.getValue();
+                arrayNumeros[8]= numberPicker8.getValue();
+                numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3])+String.valueOf(arrayNumeros[4])+String.valueOf(arrayNumeros[5])+String.valueOf(arrayNumeros[6])+String.valueOf(arrayNumeros[7])+String.valueOf(arrayNumeros[8]));
+                str_num = Integer.toString(numero);
+                break;
+        }
         analizar_intento(str_num, numero_random);
     }
 
@@ -274,37 +365,91 @@ public class JugarActivity extends AppCompatActivity {
         adapter.clear();
         contador_intentos = 0;
         listView.setAdapter(null);
-        numberPicker.setValue(1);
+        numberPicker0.setValue(1);
         numberPicker1.setValue(0);
         numberPicker2.setValue(0);
         numberPicker3.setValue(0);
+        numberPicker4.setValue(0);
+        numberPicker5.setValue(0);
+        numberPicker6.setValue(0);
+        numberPicker7.setValue(0);
+        numberPicker8.setValue(0);
         btnJugarDeNuevo.setVisibility(View.INVISIBLE);
         btnJugarDeNuevo.setClickable(false);
         btnAbandonar.setVisibility(View.VISIBLE);
         btnAbandonar.setClickable(true);
     }
 
-    private boolean validar_numero(String numero){
-        // Iterate over characters of a String
-        // using simple for loop
-        char digito;
-        boolean es_valido = true;
-
-        for (int i = 0; i < numero.length(); i++) {
-
-             digito = numero.charAt(i);
-            for(int j = i+1; j < numero.length(); j++){
-
-                if(digito == numero.charAt((j))){
-
-                    es_valido = false;
-                    break;
-                }
-            }
-            if(!es_valido) {
+    private void set_visualizacion_pickers(){
+        switch (dificultadGlobal){
+            case "facil":
+                numberPicker0.setVisibility(View.VISIBLE);
+                numberPicker0.setClickable(false);
+                numberPicker1.setVisibility(View.VISIBLE);
+                numberPicker1.setClickable(false);
+                numberPicker2.setVisibility(View.VISIBLE);
+                numberPicker2.setClickable(false);
+                // ----- no se deben ver ----
+                numberPicker3.setVisibility(View.INVISIBLE);
+                numberPicker3.setClickable(false);
+                numberPicker4.setVisibility(View.INVISIBLE);
+                numberPicker4.setClickable(false);
+                numberPicker5.setVisibility(View.INVISIBLE);
+                numberPicker5.setClickable(false);
+                numberPicker6.setVisibility(View.INVISIBLE);
+                numberPicker6.setClickable(false);
+                numberPicker7.setVisibility(View.INVISIBLE);
+                numberPicker7.setClickable(false);
+                numberPicker8.setVisibility(View.INVISIBLE);
+                numberPicker8.setClickable(false);
                 break;
-            }
+            case "intermedio":
+                numberPicker0.setVisibility(View.VISIBLE);
+                numberPicker0.setClickable(true);
+                numberPicker1.setVisibility(View.VISIBLE);
+                numberPicker1.setClickable(true);
+                numberPicker2.setVisibility(View.VISIBLE);
+                numberPicker2.setClickable(true);
+                numberPicker3.setVisibility(View.VISIBLE);
+                numberPicker3.setClickable(true);
+                numberPicker4.setVisibility(View.VISIBLE);
+                numberPicker4.setClickable(true);
+                numberPicker5.setVisibility(View.VISIBLE);
+                numberPicker5.setClickable(true);
+                // ----- no se deben ver ----
+                numberPicker6.setVisibility(View.INVISIBLE);
+                numberPicker6.setClickable(false);
+                numberPicker7.setVisibility(View.INVISIBLE);
+                numberPicker7.setClickable(false);
+                numberPicker8.setVisibility(View.INVISIBLE);
+                numberPicker8.setClickable(false);
+                break;
+            case "dificil":
+                numberPicker0.setVisibility(View.VISIBLE);
+                numberPicker0.setClickable(true);
+                numberPicker1.setVisibility(View.VISIBLE);
+                numberPicker1.setClickable(true);
+                numberPicker2.setVisibility(View.VISIBLE);
+                numberPicker2.setClickable(true);
+                numberPicker3.setVisibility(View.VISIBLE);
+                numberPicker3.setClickable(true);
+                numberPicker4.setVisibility(View.VISIBLE);
+                numberPicker4.setClickable(true);
+                numberPicker5.setVisibility(View.VISIBLE);
+                numberPicker5.setClickable(true);
+                numberPicker6.setVisibility(View.VISIBLE);
+                numberPicker6.setClickable(true);
+                numberPicker7.setVisibility(View.VISIBLE);
+                numberPicker7.setClickable(true);
+                numberPicker8.setVisibility(View.VISIBLE);
+                numberPicker8.setClickable(true);
+                break;
         }
+    }
+
+    private boolean validar_numero(String numero){ // =========================================================== SOLO DEBERIA CHEQUEAR QUE NO COMIENCE EN CERO =========================================
+        boolean es_valido;
+        es_valido = numero.charAt(0) != '0';
         return es_valido;
     }
 
@@ -313,7 +458,7 @@ public class JugarActivity extends AppCompatActivity {
 
         boolean adivinado = false;
 
-        if(validar_numero(num_intento)){ // si el numero cumple los parametros
+        if(validar_numero(num_intento)){ // si el numero cumple los parametros (no comienza con cero)
 
             tvNumeros.setText(num_intento);
 
@@ -346,9 +491,9 @@ public class JugarActivity extends AppCompatActivity {
 
                 tvNumeros.setText("==Numero ya intentado==");
             }
-        }else { // si el numero no cumple los parametros
+        }else { // si el numero comienza con cero
 
-            tvNumeros.setText("Error - Digitos repetidos");
+            tvNumeros.setText("Error - La primer cuadricula NO puede ser cero");
         }
         // retorno un booleano
         return adivinado;
@@ -391,13 +536,9 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private boolean es_repetido(ArrayList<String> lista, String valor){
-
         boolean repetido = false;
-
         for(String contenido : lista){
-
             if(valor.equals(contenido)){
-
                 repetido = true;
                 break;
             }
@@ -419,35 +560,27 @@ public class JugarActivity extends AppCompatActivity {
         return (new Random()).nextInt((max - min) + 1) + min;
     }
 
-    private String generar_numeroRandom(){
 
-        int valor1 = getRandomNumber(1,9);
-        int valor2 = getRandomNumber(0,9);
-        int valor3 = getRandomNumber(0,9);
-        int valor4 = getRandomNumber(0,9);
-
-        while(son_iguales(valor1,valor2)){
-            valor2 = getRandomNumber(0,9);
+    private String generar_numeroRandom(){ // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CAMBIAR PARA QUE SI SE VALGAN NUMEROS REPETIDOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        String num = "0";
+        switch (dificultadGlobal) {
+            case "facil":
+                do {
+                    num = Integer.toString(getRandomNumber(100,999));
+                }while(num.charAt(0)=='0');
+                break;
+            case "intermedio":
+                do {
+                    num = Integer.toString(getRandomNumber(100000, 999999));
+                }while(num.charAt(0)=='0');
+                break;
+            case "dificil":
+                do {
+                    num = Integer.toString(getRandomNumber(100000000,999999999));
+                }while(num.charAt(0)=='0');
+                break;
         }
-
-        while(son_iguales(valor1,valor3) || son_iguales(valor2,valor3)) {
-            valor3 = getRandomNumber(0,9);
-        }
-
-        while(son_iguales(valor1,valor4) || son_iguales(valor2,valor4) || son_iguales(valor3,valor4)){
-            valor4 = getRandomNumber(0,9);
-        }
-
-        //Para poder concatenar los 4 valores, recomiendan pasar cada uno a string y de ahi concatenarlos, una vez concatenados, se pueden transformar a un unico entero.
-        String prueba1 = String.valueOf(valor1);
-        String prueba2 = String.valueOf(valor2);
-        String prueba3 = String.valueOf(valor3);
-        String prueba4 = String.valueOf(valor4);
-
-        String resu = prueba1 + prueba2 + prueba3 + prueba4;
-
-        return resu;
-
+        return num;
     }
 
     private void guardarEnBD(String nombre, String puntaje, String dificultad){
@@ -476,6 +609,21 @@ public class JugarActivity extends AppCompatActivity {
             puntaje_final = 0;
         }
         return puntaje_final ;
+    }
+
+    private int obtenerLargoDificultad(){
+        int valor;
+        switch (dificultadGlobal){
+            case "intermedio":
+                valor = 6;
+                break;
+            case "dificil":
+                valor = 9;
+                break;
+            default:
+                valor = 3;
+        }
+        return valor;
     }
 
 

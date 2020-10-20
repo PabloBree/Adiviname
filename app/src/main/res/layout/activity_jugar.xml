@@ -11,11 +11,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="266dp"
+        android:layout_height="108dp"
         android:layout_marginTop="36dp"
         android:baselineAligned="false"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -49,15 +50,89 @@
             android:theme="@style/NumberPickerTheme"
             tools:ignore="MissingConstraints" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="266dp"
+        android:layout_height="107dp"
+        android:baselineAligned="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+
         <NumberPicker
             android:id="@+id/numberPicker3"
             android:layout_width="64dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:layout_marginStart="61dp"
+            android:layout_marginStart="32dp"
+            android:layout_weight="1"
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints,NestedWeights" />
+
+        <NumberPicker
+            android:id="@+id/numberPicker4"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="28dp"
             android:layout_weight="1"
             android:theme="@style/NumberPickerTheme"
             tools:ignore="MissingConstraints" />
+
+        <NumberPicker
+            android:id="@+id/numberPicker5"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="28dp"
+            android:layout_weight="1"
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="266dp"
+        android:layout_height="107dp"
+        android:baselineAligned="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <NumberPicker
+            android:id="@+id/numberPicker6"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="32dp"
+            android:layout_weight="1"
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints,NestedWeights" />
+
+        <NumberPicker
+            android:id="@+id/numberPicker7"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="28dp"
+            android:layout_weight="1"
+            android:theme="@style/NumberPickerTheme"
+            tools:ignore="MissingConstraints" />
+
+        <NumberPicker
+            android:id="@+id/numberPicker8"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="28dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:theme="@style/NumberPickerTheme" />
 
     </LinearLayout>
 
@@ -65,68 +140,84 @@
         android:id="@+id/button_Intento"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:background="@drawable/button_green_rounded"
         android:text="Intentar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout1" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     <TextView
         android:id="@+id/textViewNumeros"
-        android:layout_width="195dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_width="250dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/textbox_encuadrado"
         android:gravity="center"
         android:textColor="#DE000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_Intento" />
 
     <ListView
         android:id="@+id/list_view_puntajes"
-        android:layout_width="320dp"
-        android:layout_height="140dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_Abandonar"
+        android:layout_width="309dp"
+        android:layout_height="85dp"
+        android:fadeScrollbars="true"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNumeros"
-        android:fadeScrollbars="true"
-        android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll">
-    </ListView>
+        app:layout_constraintTop_toBottomOf="@+id/textView4"></ListView>
 
     <Button
         android:id="@+id/button_Abandonar"
         android:layout_width="196dp"
         android:layout_height="33dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="132dp"
+        android:layout_marginTop="4dp"
         android:layout_weight="1"
         android:background="@drawable/button_green_rounded"
         android:text="Abandonar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view_puntajes"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button_JugarDeNuevo"
         android:layout_width="196dp"
         android:layout_height="33dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginTop="4dp"
         android:layout_weight="1"
         android:background="@drawable/button_green_rounded"
+        android:clickable="false"
         android:text="Jugar de nuevo"
         android:visibility="invisible"
-        android:clickable="false"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_Abandonar" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Tus intentos"
+        android:textColor="#D4000000"
+        android:textSize="24sp"
+        android:typeface="sans"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNumeros" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
