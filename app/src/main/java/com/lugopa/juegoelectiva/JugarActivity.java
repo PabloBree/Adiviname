@@ -1,13 +1,28 @@
 package com.lugopa.juegoelectiva;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.ResultReceiver;
 import android.os.Vibrator;
+import android.provider.Settings;
+import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,14 +30,22 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.google.android.gms.common.internal.Constants;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.lugopa.juegoelectiva.Model.Puntaje;
+import com.lugopa.juegoelectiva.Model.ServicioObtencionDeDireccion;
 import com.lugopa.juegoelectiva.Model.VariablesGlobales;
+import com.lugopa.juegoelectiva.Model.Constantes;
 
 
 public class JugarActivity extends AppCompatActivity {
@@ -62,6 +85,10 @@ public class JugarActivity extends AppCompatActivity {
     int duracion = 80;
     private MediaPlayer soundMP;
 
+    // geolocalizacion
+    private static final int SOLICITUD_CODIGO_PERMISO_UBICACION = 1;
+    private ResultReceiver resultReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +96,7 @@ public class JugarActivity extends AppCompatActivity {
 
         inicializar();
 
-        vibe = (Vibrator)JugarActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+        vibe = (Vibrator) JugarActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
         soundMP = MediaPlayer.create(this, R.raw.sonido_boton_click);
 
         btnIntento.setOnClickListener(new View.OnClickListener() {
@@ -185,15 +212,19 @@ public class JugarActivity extends AppCompatActivity {
         });
 
         //numberPicker.setOnValueChangedListener(this);
+
+        getPermisoUbicacion();
+
+        resultReceiver = new ReceptorResultadoDeDireccion(new Handler());
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    private void inicializar(){
+    private void inicializar() {
         btnIntento = findViewById(R.id.button_Intento);
         btnAbandonar = findViewById(R.id.button_Abandonar);
         btnJugarDeNuevo = findViewById(R.id.button_JugarDeNuevo);
@@ -215,7 +246,7 @@ public class JugarActivity extends AppCompatActivity {
         largo_dificultad = obtenerLargoDificultad();
 
         numero_random = generar_numeroRandom(); // asignamos el numero random que debe adivinarse
-        tvNumeros.setText("Generado = "+ numero_random);
+        tvNumeros.setText("Generado = " + numero_random);
 
         // Manejo de la lista.....
         listView = findViewById(R.id.list_view_puntajes);
@@ -224,64 +255,64 @@ public class JugarActivity extends AppCompatActivity {
         set_visualizacion_pickers();
     }
 
-    private void oprimir_boton_Intentar(){
+    private void oprimir_boton_Intentar() {
         soundMP.start();
         vibe.vibrate(duracion);
         //////////////////////////////////////////////////////////////////////////////////// HABRIA QUE HACER UN CASE PARA DETERMINAR QUE VALORES TOMA SEGUN LA VARIAbLE GLOBAL DE DIFICULTAD
         int numero;
         String str_num = "000";
-        switch (dificultadGlobal){
+        switch (dificultadGlobal) {
             case "facil":
-                arrayNumeros[0]= numberPicker0.getValue();
-                arrayNumeros[1]= numberPicker1.getValue();
-                arrayNumeros[2]= numberPicker2.getValue();
-                numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2]));
+                arrayNumeros[0] = numberPicker0.getValue();
+                arrayNumeros[1] = numberPicker1.getValue();
+                arrayNumeros[2] = numberPicker2.getValue();
+                numero = Integer.parseInt(String.valueOf(arrayNumeros[0]) + String.valueOf(arrayNumeros[1]) + String.valueOf(arrayNumeros[2]));
                 str_num = Integer.toString(numero);
                 break;
             case "intermedio":
-                arrayNumeros[0]= numberPicker0.getValue();
-                arrayNumeros[1]= numberPicker1.getValue();
-                arrayNumeros[2]= numberPicker2.getValue();
-                arrayNumeros[3]= numberPicker3.getValue();
-                arrayNumeros[4]= numberPicker4.getValue();
-                arrayNumeros[5]= numberPicker5.getValue();
-                numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3])+String.valueOf(arrayNumeros[4])+String.valueOf(arrayNumeros[5]));
+                arrayNumeros[0] = numberPicker0.getValue();
+                arrayNumeros[1] = numberPicker1.getValue();
+                arrayNumeros[2] = numberPicker2.getValue();
+                arrayNumeros[3] = numberPicker3.getValue();
+                arrayNumeros[4] = numberPicker4.getValue();
+                arrayNumeros[5] = numberPicker5.getValue();
+                numero = Integer.parseInt(String.valueOf(arrayNumeros[0]) + String.valueOf(arrayNumeros[1]) + String.valueOf(arrayNumeros[2]) + String.valueOf(arrayNumeros[3]) + String.valueOf(arrayNumeros[4]) + String.valueOf(arrayNumeros[5]));
                 str_num = Integer.toString(numero);
                 break;
             case "dificil":
-                arrayNumeros[0]= numberPicker0.getValue();
-                arrayNumeros[1]= numberPicker1.getValue();
-                arrayNumeros[2]= numberPicker2.getValue();
-                arrayNumeros[3]= numberPicker3.getValue();
-                arrayNumeros[4]= numberPicker4.getValue();
-                arrayNumeros[5]= numberPicker5.getValue();
-                arrayNumeros[6]= numberPicker6.getValue();
-                arrayNumeros[7]= numberPicker7.getValue();
-                arrayNumeros[8]= numberPicker8.getValue();
-                numero = Integer.parseInt(String.valueOf(arrayNumeros[0])+String.valueOf(arrayNumeros[1])+String.valueOf(arrayNumeros[2])+String.valueOf(arrayNumeros[3])+String.valueOf(arrayNumeros[4])+String.valueOf(arrayNumeros[5])+String.valueOf(arrayNumeros[6])+String.valueOf(arrayNumeros[7])+String.valueOf(arrayNumeros[8]));
+                arrayNumeros[0] = numberPicker0.getValue();
+                arrayNumeros[1] = numberPicker1.getValue();
+                arrayNumeros[2] = numberPicker2.getValue();
+                arrayNumeros[3] = numberPicker3.getValue();
+                arrayNumeros[4] = numberPicker4.getValue();
+                arrayNumeros[5] = numberPicker5.getValue();
+                arrayNumeros[6] = numberPicker6.getValue();
+                arrayNumeros[7] = numberPicker7.getValue();
+                arrayNumeros[8] = numberPicker8.getValue();
+                numero = Integer.parseInt(String.valueOf(arrayNumeros[0]) + String.valueOf(arrayNumeros[1]) + String.valueOf(arrayNumeros[2]) + String.valueOf(arrayNumeros[3]) + String.valueOf(arrayNumeros[4]) + String.valueOf(arrayNumeros[5]) + String.valueOf(arrayNumeros[6]) + String.valueOf(arrayNumeros[7]) + String.valueOf(arrayNumeros[8]));
                 str_num = Integer.toString(numero);
                 break;
         }
         analizar_intento(str_num, numero_random);
     }
 
-    private void oprimir_boton_Abandonar(){
+    private void oprimir_boton_Abandonar() {
         soundMP.start();
         vibe.vibrate(duracion);
         mostrarDialogAbandonar();
     }
 
-    private void mostrarDialogAbandonar(){
+    private void mostrarDialogAbandonar() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(JugarActivity.this);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_abandonar,null);
+        View view = inflater.inflate(R.layout.dialog_abandonar, null);
         builder.setView(view).setCancelable(false);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
         numeroadivinado = view.findViewById(R.id.text_numero_adivinado); //Hizo falta aclarar la view para que no rompa, se mezclaban las vistas y rompía
-        numeroadivinado.setText("El número era "+ numero_random);
+        numeroadivinado.setText("El número era " + numero_random);
 
         Button btn_jugardevuelta = view.findViewById(R.id.btn_jugardevuelta);
         Button btn_salir = view.findViewById(R.id.btn_salir);
@@ -307,17 +338,17 @@ public class JugarActivity extends AppCompatActivity {
 
     }
 
-    private void mostrarDialogVictoria(){
+    private void mostrarDialogVictoria() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(JugarActivity.this);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_victoria,null);
+        View view = inflater.inflate(R.layout.dialog_victoria, null);
         builder.setView(view).setCancelable(false);
         final AlertDialog dialog = builder.create();
         dialog.show();
 
         numeroadivinado = view.findViewById(R.id.text_numero_adivinado); //Hizo falta aclarar la view para que no rompa, se mezclaban las vistas y rompía
-        numeroadivinado.setText("Bien hecho! Obtuviste "+ puntuacion +" puntos");
+        numeroadivinado.setText("Bien hecho! Obtuviste " + puntuacion + " puntos");
 
         nombreIngresado = view.findViewById(R.id.editText_nombre_ingresado);
 
@@ -350,7 +381,7 @@ public class JugarActivity extends AppCompatActivity {
                 soundMP.start();
                 vibe.vibrate(duracion);
                 String nom = nombreIngresado.getText().toString();
-                guardarEnBD(nom, Integer.toString(puntuacion),  dificultadGlobal);
+                guardarEnBD(nom, Integer.toString(puntuacion), dificultadGlobal);
                 numeroadivinado.setText("Puntaje guardado exitosamente!!");
                 btn_guardar.setClickable(false);
                 btn_guardar.setBackgroundColor(Color.GRAY);
@@ -360,7 +391,7 @@ public class JugarActivity extends AppCompatActivity {
 
     }
 
-    private void jugarDeNuevo(){
+    private void jugarDeNuevo() {
         inicializar();
         adapter.clear();
         contador_intentos = 0;
@@ -380,8 +411,8 @@ public class JugarActivity extends AppCompatActivity {
         btnAbandonar.setClickable(true);
     }
 
-    private void set_visualizacion_pickers(){
-        switch (dificultadGlobal){
+    private void set_visualizacion_pickers() {
+        switch (dificultadGlobal) {
             case "facil":
                 numberPicker0.setVisibility(View.VISIBLE);
                 numberPicker0.setClickable(false);
@@ -447,26 +478,26 @@ public class JugarActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validar_numero(String numero){ // =========================================================== SOLO DEBERIA CHEQUEAR QUE NO COMIENCE EN CERO =========================================
+    private boolean validar_numero(String numero) { // =========================================================== SOLO DEBERIA CHEQUEAR QUE NO COMIENCE EN CERO =========================================
         boolean es_valido;
         es_valido = numero.charAt(0) != '0';
         return es_valido;
     }
 
 
-    private boolean analizar_intento(String num_intento, String num_generado ){ // para determinar si el numero del usuario es igual al generado
+    private boolean analizar_intento(String num_intento, String num_generado) { // para determinar si el numero del usuario es igual al generado
 
         boolean adivinado = false;
 
-        if(validar_numero(num_intento)){ // si el numero cumple los parametros (no comienza con cero)
+        if (validar_numero(num_intento)) { // si el numero cumple los parametros (no comienza con cero)
 
             tvNumeros.setText(num_intento);
 
-            if(!es_repetido(lista_intentos, num_intento)){ // Si el numero NO fue ingresado previamente
+            if (!es_repetido(lista_intentos, num_intento)) { // Si el numero NO fue ingresado previamente
 
                 boolean iguales = son_iguales(Integer.parseInt(num_intento), Integer.parseInt(num_generado));
 
-                if(iguales){ // si son iguales, EL NUMERO FUE ADIVINADO
+                if (iguales) { // si son iguales, EL NUMERO FUE ADIVINADO
 
                     adivinado = true;
                     puntuacion = calcularPuntaje(contador_intentos, dificultadGlobal);
@@ -478,20 +509,20 @@ public class JugarActivity extends AppCompatActivity {
                     btnJugarDeNuevo.setVisibility(View.VISIBLE);
                     btnAbandonar.setVisibility(View.INVISIBLE);
                     btnAbandonar.setClickable(false);
-                }else{ // Si NO son iguales, el numero no fue adivinado y debe agregarse a la lista de intentos
-                    contador_intentos ++;
+                } else { // Si NO son iguales, el numero no fue adivinado y debe agregarse a la lista de intentos
+                    contador_intentos++;
                     int cant_regulares = buscar_regulares(num_intento, num_generado);
                     int cant_correctos = buscar_correctos(num_intento, num_generado);
-                    tvNumeros.setText("Correctos: "+ cant_correctos +" Regulares: "+ cant_regulares);
-                    actualizar_lista(lista_intentos_descripcion,num_intento + " --> Correctos: "+ cant_correctos+" Regulares: "+ cant_regulares); // agrego el intento a la lista
+                    tvNumeros.setText("Correctos: " + cant_correctos + " Regulares: " + cant_regulares);
+                    actualizar_lista(lista_intentos_descripcion, num_intento + " --> Correctos: " + cant_correctos + " Regulares: " + cant_regulares); // agrego el intento a la lista
                     actualizar_lista(lista_intentos, num_intento);
                     listView.setAdapter(adapter);
                 }
-            }else{ // Si el numero ya fue ingresado
+            } else { // Si el numero ya fue ingresado
 
                 tvNumeros.setText("==Numero ya intentado==");
             }
-        }else { // si el numero comienza con cero
+        } else { // si el numero comienza con cero
 
             tvNumeros.setText("Error - La primer cuadricula NO puede ser cero");
         }
@@ -499,21 +530,21 @@ public class JugarActivity extends AppCompatActivity {
         return adivinado;
     }
 
-    private int buscar_regulares(String intento, String numeroGenerado){
+    private int buscar_regulares(String intento, String numeroGenerado) {
 
         char num_intento;
         int contador_regulares = 0;
 
-        for (int i=0; i < intento.length(); i++){
+        for (int i = 0; i < intento.length(); i++) {
 
-             num_intento = intento.charAt(i);
+            num_intento = intento.charAt(i);
 
-             for (int j=0; j < numeroGenerado.length(); j++){
+            for (int j = 0; j < numeroGenerado.length(); j++) {
 
-                 if (num_intento == numeroGenerado.charAt(j) && j != i){ // si son iguales y NO estan en la misma posicion
-                     contador_regulares++;
-                 }
-             }
+                if (num_intento == numeroGenerado.charAt(j) && j != i) { // si son iguales y NO estan en la misma posicion
+                    contador_regulares++;
+                }
+            }
         }
         return contador_regulares;
     }
@@ -522,23 +553,23 @@ public class JugarActivity extends AppCompatActivity {
 
         int contador_correctos = 0;
 
-        for (int i=0; i < intento.length(); i++)
+        for (int i = 0; i < intento.length(); i++)
 
-            if(intento.charAt(i) == numeroGenerado.charAt(i)){ // si estan en la misma posicion y son iguales
+            if (intento.charAt(i) == numeroGenerado.charAt(i)) { // si estan en la misma posicion y son iguales
 
                 contador_correctos++;
             }
         return contador_correctos;
     }
 
-    private void actualizar_lista(ArrayList<String> lista, String valor){
+    private void actualizar_lista(ArrayList<String> lista, String valor) {
         lista.add(valor);
     }
 
-    private boolean es_repetido(ArrayList<String> lista, String valor){
+    private boolean es_repetido(ArrayList<String> lista, String valor) {
         boolean repetido = false;
-        for(String contenido : lista){
-            if(valor.equals(contenido)){
+        for (String contenido : lista) {
+            if (valor.equals(contenido)) {
                 repetido = true;
                 break;
             }
@@ -552,68 +583,68 @@ public class JugarActivity extends AppCompatActivity {
         tvShowNumbers.setText("Old Number= "+i+" New Number = "+i1);
     }*/
 
-    private boolean son_iguales(int a, int b){
+    private boolean son_iguales(int a, int b) {
         return a == b; /*retorna True o False*/
     }
 
-    private int getRandomNumber(int min,int max) {
+    private int getRandomNumber(int min, int max) {
         return (new Random()).nextInt((max - min) + 1) + min;
     }
 
 
-    private String generar_numeroRandom(){ // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CAMBIAR PARA QUE SI SE VALGAN NUMEROS REPETIDOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private String generar_numeroRandom() {
         String num = "0";
         switch (dificultadGlobal) {
             case "facil":
                 do {
-                    num = Integer.toString(getRandomNumber(100,999));
-                }while(num.charAt(0)=='0');
+                    num = Integer.toString(getRandomNumber(100, 999));
+                } while (num.charAt(0) == '0');
                 break;
             case "intermedio":
                 do {
                     num = Integer.toString(getRandomNumber(100000, 999999));
-                }while(num.charAt(0)=='0');
+                } while (num.charAt(0) == '0');
                 break;
             case "dificil":
                 do {
-                    num = Integer.toString(getRandomNumber(100000000,999999999));
-                }while(num.charAt(0)=='0');
+                    num = Integer.toString(getRandomNumber(100000000, 999999999));
+                } while (num.charAt(0) == '0');
                 break;
         }
         return num;
     }
 
-    private void guardarEnBD(String nombre, String puntaje, String dificultad){
+    private void guardarEnBD(String nombre, String puntaje, String dificultad) {
         DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
         //Map<String, Puntaje> users = new HashMap<>();
         Puntaje puntajeBD = new Puntaje(nombre, puntaje, dificultad);
         mDataBase.child("Usuarios").push().setValue(puntajeBD);
     }
 
-    private int calcularPuntaje(int contador_intentos, String dificultad){
+    private int calcularPuntaje(int contador_intentos, String dificultad) {
         int puntaje_max_facil = 100;
         int puntaje_max_intermedio = 200;
         int puntaje_max_dificil = 300;
         int puntaje_final = 0;
-        switch (dificultad){
+        switch (dificultad) {
             case "intermedio":
                 puntaje_final = puntaje_max_intermedio - (contador_intentos * 5);
                 break;
             case "dificil":
-                puntaje_final = puntaje_max_dificil- (contador_intentos * 5);
+                puntaje_final = puntaje_max_dificil - (contador_intentos * 5);
                 break;
             default: // seria el nivel FACIL
                 puntaje_final = puntaje_max_facil - (contador_intentos * 5);
         }
-        if (puntaje_final < 0){
+        if (puntaje_final < 0) {
             puntaje_final = 0;
         }
-        return puntaje_final ;
+        return puntaje_final;
     }
 
-    private int obtenerLargoDificultad(){
+    private int obtenerLargoDificultad() {
         int valor;
-        switch (dificultadGlobal){
+        switch (dificultadGlobal) {
             case "intermedio":
                 valor = 6;
                 break;
@@ -626,5 +657,104 @@ public class JugarActivity extends AppCompatActivity {
         return valor;
     }
 
+    private void getUbicacionActual() {
+        final LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(3000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.getFusedLocationProviderClient(JugarActivity.this)
+                .requestLocationUpdates(locationRequest, new LocationCallback() {
+
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        super.onLocationResult(locationResult);
+                        LocationServices.getFusedLocationProviderClient(JugarActivity.this)
+                                .removeLocationUpdates(this);
+                        if (locationResult != null && locationResult.getLocations().size() > 0) {
+                            int latestLocationIndex = locationResult.getLocations().size() - 1;
+                            double latitud =
+                                    locationResult.getLocations().get(latestLocationIndex).getLatitude();
+                            double longitud =
+                                    locationResult.getLocations().get(latestLocationIndex).getLongitude();
+//                            textLatLong.setText(
+//                                    String.format(
+//                                            "latitude: %s\nLongitude: %s",
+//                                            latitud,
+//                                            longitud
+//                                    )
+//                            );
+                            Toast.makeText(JugarActivity.this, "Latitud: " + latitud + " Longitud: " + longitud, Toast.LENGTH_SHORT).show();
+
+                            Location location = new Location("providerNA");
+                            location.setLatitude(latitud);
+                            location.setLongitude(longitud);
+                            obtenerdireccionDesdeLatLong(location);
+
+                        } else {
+                            // aca, ocultaba el PROGRESSBAR
+                        }
+                    }
+                }, Looper.getMainLooper() );
+    }
+
+    private void obtenerdireccionDesdeLatLong(Location location){
+        Intent intent = new Intent(this, ServicioObtencionDeDireccion.class);
+        intent.putExtra(Constantes.RECEIVER, resultReceiver);
+        intent.putExtra(Constantes.LOCATION_DATA_EXTRA, location);
+        startService(intent);
+    }
+
+    private class ReceptorResultadoDeDireccion extends ResultReceiver {
+
+        ReceptorResultadoDeDireccion(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            if (resultCode == Constantes.SUCCESS_RESULT){
+                Toast.makeText(JugarActivity.this, resultData.getString(Constantes.RESULT_DATA_KEY), Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(JugarActivity.this, resultData.getString(Constantes.RESULT_DATA_KEY), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void getPermisoUbicacion(){
+        if(ContextCompat.checkSelfPermission(
+                getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    JugarActivity.this, // NO ERA ASI LA LINEA
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    SOLICITUD_CODIGO_PERMISO_UBICACION
+            );
+        } else {
+            getUbicacionActual();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == SOLICITUD_CODIGO_PERMISO_UBICACION && grantResults.length > 0) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getUbicacionActual();
+            } else {
+                Toast.makeText(this,"Permiso denegado!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
