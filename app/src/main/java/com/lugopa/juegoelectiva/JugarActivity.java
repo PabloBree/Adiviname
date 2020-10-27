@@ -88,6 +88,7 @@ public class JugarActivity extends AppCompatActivity {
     // geolocalizacion
     private static final int SOLICITUD_CODIGO_PERMISO_UBICACION = 1;
     private ResultReceiver resultReceiver;
+    private String ubicacionActual = "Sin registro";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -381,7 +382,7 @@ public class JugarActivity extends AppCompatActivity {
                 soundMP.start();
                 vibe.vibrate(duracion);
                 String nom = nombreIngresado.getText().toString();
-                guardarEnBD(nom, Integer.toString(puntuacion), dificultadGlobal);
+                guardarEnBD(nom, Integer.toString(puntuacion), dificultadGlobal, ubicacionActual);
                 numeroadivinado.setText("Puntaje guardado exitosamente!!");
                 btn_guardar.setClickable(false);
                 btn_guardar.setBackgroundColor(Color.GRAY);
@@ -614,10 +615,10 @@ public class JugarActivity extends AppCompatActivity {
         return num;
     }
 
-    private void guardarEnBD(String nombre, String puntaje, String dificultad) {
+    private void guardarEnBD(String nombre, String puntaje, String dificultad, String ubicacion) {
         DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
         //Map<String, Puntaje> users = new HashMap<>();
-        Puntaje puntajeBD = new Puntaje(nombre, puntaje, dificultad);
+        Puntaje puntajeBD = new Puntaje(nombre, puntaje, dificultad, ubicacion);
         mDataBase.child("Usuarios").push().setValue(puntajeBD);
     }
 
@@ -729,6 +730,7 @@ public class JugarActivity extends AppCompatActivity {
             } else{
                 Toast.makeText(JugarActivity.this, resultData.getString(Constantes.RESULT_DATA_KEY), Toast.LENGTH_SHORT).show();
             }
+            ubicacionActual = resultData.getString(Constantes.RESULT_DATA_KEY);
         }
     }
 

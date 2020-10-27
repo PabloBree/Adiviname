@@ -5,11 +5,13 @@ public class Puntaje {
     private String nombre;
     private String puntaje;
     private String dificultad;
+    private String ubicacion;
 
-    public Puntaje(String n, String p, String d){
+    public Puntaje(String n, String p, String d, String u){
         this.nombre = n;
         this.puntaje = p;
         this.dificultad = d;
+        this.ubicacion = u;
     }
     public Puntaje(){
     }
@@ -28,5 +30,9 @@ public class Puntaje {
 
     public String getPuntaje() {
         return puntaje;
+    }
+
+    public String getUbicacion(){
+        return ubicacion;
     }
 }
