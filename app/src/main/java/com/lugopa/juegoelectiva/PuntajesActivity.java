@@ -28,8 +28,10 @@ public class PuntajesActivity extends AppCompatActivity {
     private DatabaseReference bdReference;
 
     ListView listView;
-    private ArrayList<String> lista_puntajes = new ArrayList();
-    ArrayAdapter<String> adapter;
+    private ArrayList<Puntaje> lista_puntajes = new ArrayList<>();
+    //ArrayAdapter<Puntaje> adapter;
+    //ADAPTER PERSONALIZADO
+    PersonListAdapter adapter;
 
     String dificultad;
     String nombre;
@@ -62,8 +64,8 @@ public class PuntajesActivity extends AppCompatActivity {
 
         // Manejo de la lista.....
         listView = findViewById(R.id.list_view_puntajes);
-        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_puntajes);
-
+       // adapter = new ArrayAdapter<Puntaje>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_puntajes);
+        adapter = new PersonListAdapter(getApplicationContext(),R.layout.adapter_puntajes_layout,lista_puntajes);
         obtenerListaBD();
 
     }
@@ -73,7 +75,6 @@ public class PuntajesActivity extends AppCompatActivity {
     private void obtenerListaBD(){
 
         DatabaseReference nodoUsuarios = FirebaseDatabase.getInstance().getReference().child("Usuarios");
-
         nodoUsuarios.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -81,14 +82,14 @@ public class PuntajesActivity extends AppCompatActivity {
                     String nombre;
                     String dificultad;
                     String puntaje;
-
+                    // OBTENEMOS LOS DATOS DEL PUNTAJE DE LA BASE DE DATOS
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         Puntaje p = ds.getValue(Puntaje.class);
                         dificultad = p.getDificultad();
                         nombre = p.getNombre();
                         puntaje = p.getPuntaje();
 
-                        lista_puntajes.add(nombre + " - " + dificultad +" - "+ puntaje);
+                        lista_puntajes.add(p);
                         listView.setAdapter(adapter);
                     }
 

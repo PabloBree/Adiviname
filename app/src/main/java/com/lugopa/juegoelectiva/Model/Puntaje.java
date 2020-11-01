@@ -35,4 +35,6 @@ public class Puntaje {
     public String getUbicacion(){
         return ubicacion;
     }
+
+
 }
