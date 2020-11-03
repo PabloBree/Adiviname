@@ -73,21 +73,20 @@ public class PuntajesActivity extends AppCompatActivity {
 
 
     private void obtenerListaBD(){
-
         DatabaseReference nodoUsuarios = FirebaseDatabase.getInstance().getReference().child("Usuarios");
         nodoUsuarios.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String nombre;
-                    String dificultad;
-                    String puntaje;
+//                    String nombre;
+//                    String dificultad;
+//                    String puntaje;
                     // OBTENEMOS LOS DATOS DEL PUNTAJE DE LA BASE DE DATOS
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         Puntaje p = ds.getValue(Puntaje.class);
-                        dificultad = p.getDificultad();
-                        nombre = p.getNombre();
-                        puntaje = p.getPuntaje();
+//                        dificultad = p.getDificultad();
+//                        nombre = p.getNombre();
+//                        puntaje = p.getPuntaje();
 
                         lista_puntajes.add(p);
                         listView.setAdapter(adapter);
