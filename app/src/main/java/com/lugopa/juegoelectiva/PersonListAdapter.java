@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lugopa.juegoelectiva.Model.Puntaje;
@@ -49,12 +50,16 @@ public class PersonListAdapter extends ArrayAdapter<Puntaje> {
         TextView tvNombre = (TextView) convertView.findViewById(R.id.textView2);
         TextView tvDificultad = (TextView) convertView.findViewById(R.id.textView3);
         TextView tvPuntaje = (TextView) convertView.findViewById(R.id.textView1);
-        TextView tvUbicacion = (TextView) convertView.findViewById(R.id.textView4);
+        //TextView tvUbicacion = (TextView) convertView.findViewById(R.id.textView4);
+        ImageView imageViewPais = (ImageView) convertView.findViewById(R.id.imageView1);
+
 
         tvNombre.setText(nombre);
         tvDificultad.setText(dificultad);
         tvPuntaje.setText(puntaje);
-        tvUbicacion.setText(paisP);
+        //tvUbicacion.setText(paisP);
+        //imageViewPais.setImageResource(R.mipmap.argentina_flag_round);
+        seleccionarImagenPais(imageViewPais, paisP);
         return convertView;
     }
 
@@ -62,13 +67,30 @@ public class PersonListAdapter extends ArrayAdapter<Puntaje> {
         String pais = null;
         for (int i=ubic.length()-1; i!=0; i--){
             if(ubic.charAt(i)==','){
-                pais=Character.toString(ubic.charAt(i+1));
-                for(int j=i+2; j< ubic.length(); j++){
+                pais=Character.toString(ubic.charAt(i+2));
+                for(int j=i+3; j< ubic.length(); j++){
                     pais = pais + ubic.charAt(j);
                 }
                 break;
             }
         }
         return pais;
+    }
+
+    private void seleccionarImagenPais(ImageView imageView, String pais){
+        switch (pais){
+            case "Argentina":
+                imageView.setImageResource(R.mipmap.argentina_flag_round);
+                break;
+            case "Brasil":
+                imageView.setImageResource(R.mipmap.brasil_flag_round);
+                break;
+            case "Uruguay":
+                imageView.setImageResource(R.mipmap.uruguay_flag_round);
+                break;
+            default:
+                imageView.setImageResource(R.mipmap.ic_launcher_round);
+                break;
+        }
     }
 }
