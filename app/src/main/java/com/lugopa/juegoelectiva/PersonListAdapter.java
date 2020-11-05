@@ -88,6 +88,33 @@ public class PersonListAdapter extends ArrayAdapter<Puntaje> {
             case "Uruguay":
                 imageView.setImageResource(R.mipmap.uruguay_flag_round);
                 break;
+            case "Paraguay":
+                imageView.setImageResource(R.mipmap.paraguay_flag_round);
+                break;
+            case "Bolivia":
+                imageView.setImageResource(R.mipmap.bolivia_flag_round);
+                break;
+            case "Peru":
+                imageView.setImageResource(R.mipmap.peru_flag_round);
+                break;
+            case "Colombia":
+                imageView.setImageResource(R.mipmap.colombia_flag_round);
+                break;
+            case "Ecuador":
+                imageView.setImageResource(R.mipmap.ecuador_flag_round);
+                break;
+            case "Surinam":
+                imageView.setImageResource(R.mipmap.surinam_flag_round);
+                break;
+            case "Guyana":
+                imageView.setImageResource(R.mipmap.guyana_flag_round);
+                break;
+            case "Venezuela":
+                imageView.setImageResource(R.mipmap.venezuela_flag_round);
+                break;
+            case "Chile":
+                imageView.setImageResource(R.mipmap.chile_flag_round);
+                break;
             default:
                 imageView.setImageResource(R.mipmap.ic_launcher_round);
                 break;

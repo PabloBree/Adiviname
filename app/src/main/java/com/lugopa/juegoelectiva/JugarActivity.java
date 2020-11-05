@@ -623,19 +623,23 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private int calcularPuntaje(int contador_intentos, String dificultad) {
-        int puntaje_max_facil = 100;
-        int puntaje_max_intermedio = 200;
-        int puntaje_max_dificil = 300;
+        int puntaje_max_facil = 3000;
+        int puntaje_max_inter = 6000;
+        int puntaje_max_dificil = 9000;
+
         int puntaje_final = 0;
+        if(contador_intentos == 0){
+            contador_intentos =1;
+        }
         switch (dificultad) {
             case "intermedio":
-                puntaje_final = puntaje_max_intermedio - (contador_intentos * 5);
+                puntaje_final = puntaje_max_inter- (contador_intentos * 100);
                 break;
             case "dificil":
-                puntaje_final = puntaje_max_dificil - (contador_intentos * 5);
+                puntaje_final = puntaje_max_dificil - (contador_intentos * 100);
                 break;
             default: // seria el nivel FACIL
-                puntaje_final = puntaje_max_facil - (contador_intentos * 5);
+                puntaje_final = puntaje_max_facil - (contador_intentos * 100);
         }
         if (puntaje_final < 0) {
             puntaje_final = 0;
