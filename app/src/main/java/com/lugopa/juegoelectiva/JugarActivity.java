@@ -7,22 +7,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
 import android.os.Vibrator;
-import android.provider.Settings;
-import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -35,7 +30,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.google.android.gms.common.internal.Constants;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -316,7 +310,7 @@ public class JugarActivity extends AppCompatActivity {
         numeroadivinado.setText("El número era " + numero_random);
 
         Button btn_jugardevuelta = view.findViewById(R.id.btn_jugardevuelta);
-        Button btn_salir = view.findViewById(R.id.btn_salir);
+        Button btn_salir = view.findViewById(R.id.button_regresar_configuracion);
 
         btn_jugardevuelta.setOnClickListener(new View.OnClickListener() {
             @Override

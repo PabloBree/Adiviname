@@ -19,6 +19,7 @@ public class ConfiguracionActivity extends AppCompatActivity {
     private Button btnFacil;
     private Button btnIntermedio;
     private Button btnDificil;
+    private Button btn_regresar;
 
     private String dificultad;
 
@@ -67,6 +68,16 @@ public class ConfiguracionActivity extends AppCompatActivity {
             }
         });
 
+        btn_regresar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                soundMP.start();
+                vibe.vibrate(duracion);
+                onBackPressed();
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
+
     }
 
     @Override
@@ -81,6 +92,7 @@ public class ConfiguracionActivity extends AppCompatActivity {
         btnDificil = findViewById(R.id.buttonDificil);
         dificultad = ((VariablesGlobales) this.getApplication()).getDificultad();
         setEstadoBotones(dificultad);
+        btn_regresar = findViewById(R.id.button_regresar_configuracion);
     }
 
     private void setEstadoBotones(String dificultad){
@@ -123,8 +135,6 @@ public class ConfiguracionActivity extends AppCompatActivity {
     private void setDificultadGlobal(String dif){
         ((VariablesGlobales) this.getApplication()).setDificultad(dif);
     }
-
-
 
 }
 

@@ -29,7 +29,7 @@
 
 
         <Button
-            android:id="@+id/btn_salir"
+            android:id="@+id/button_regresar_configuracion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="6dp"

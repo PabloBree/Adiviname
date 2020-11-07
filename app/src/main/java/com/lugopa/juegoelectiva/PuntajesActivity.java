@@ -27,6 +27,7 @@ public class PuntajesActivity extends AppCompatActivity {
     private Button btnSalir;
     private DatabaseReference bdReference;
 
+
     ListView listView;
     private ArrayList<Puntaje> lista_puntajes = new ArrayList<>();
     //ArrayAdapter<Puntaje> adapter;
@@ -50,6 +51,7 @@ public class PuntajesActivity extends AppCompatActivity {
         soundMP = MediaPlayer.create(this, R.raw.sonido_boton_click);
 
         btnSalir = findViewById(R.id.button_salir_puntajes);
+
 
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override

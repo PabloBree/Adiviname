@@ -67,6 +67,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.369"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <Button
+        android:id="@+id/button_regresar_configuracion"
+        android:layout_width="141dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="96dp"
+        android:background="@drawable/button_green_rounded"
+        android:text="Regresar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonDificil" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
