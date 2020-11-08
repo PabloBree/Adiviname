@@ -36,6 +36,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.lugopa.juegoelectiva.Model.Intento;
 import com.lugopa.juegoelectiva.Model.Puntaje;
 import com.lugopa.juegoelectiva.Model.ServicioObtencionDeDireccion;
 import com.lugopa.juegoelectiva.Model.VariablesGlobales;
@@ -70,11 +71,11 @@ public class JugarActivity extends AppCompatActivity {
     String numero_random;
 
     ListView listView;
-    private ArrayList<String> lista_intentos = new ArrayList();
-    private ArrayList<String> lista_intentos_descripcion = new ArrayList();
-    ArrayAdapter<String> adapter;
+    private ArrayList<String> lista_intentos_numeros = new ArrayList();
+    private ArrayList<Intento> lista_intentos_objetos = new ArrayList();
+    //ArrayAdapter<String> adapter;
     //ADAPTER LISTA INTENTOS PERSONALIZADO =======================================================================================================================
-
+    IntentoListAdapter adapter;
 
     // Vibracion y sonido de botones
     private Vibrator vibe;
@@ -246,8 +247,10 @@ public class JugarActivity extends AppCompatActivity {
         tvNumeros.setText("Generado = " + numero_random);
 
         // Manejo de la lista.....
+        //listView = findViewById(R.id.list_view_puntajes);
+        //adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_intentos_descripcion);
         listView = findViewById(R.id.list_view_puntajes);
-        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_intentos_descripcion);
+        adapter = new IntentoListAdapter(getApplicationContext(),R.layout.adapter_intentos_layout,lista_intentos_objetos);
 
         set_visualizacion_pickers();
     }
@@ -490,7 +493,7 @@ public class JugarActivity extends AppCompatActivity {
 
             tvNumeros.setText(num_intento);
 
-            if (!es_repetido(lista_intentos, num_intento)) { // Si el numero NO fue ingresado previamente
+            if (!es_repetido(lista_intentos_numeros, num_intento)) { // Si el numero NO fue ingresado previamente
 
                 boolean iguales = son_iguales(Integer.parseInt(num_intento), Integer.parseInt(num_generado));
 
@@ -499,8 +502,8 @@ public class JugarActivity extends AppCompatActivity {
                     adivinado = true;
                     puntuacion = calcularPuntaje(contador_intentos, dificultadGlobal);
                     mostrarDialogVictoria();  // ------------------analizar ubicacion en el codigo ------------
-                    lista_intentos.clear(); // vacio la lista de numeros
-                    lista_intentos_descripcion.clear(); // vacio la lista con las descripciones
+                    lista_intentos_numeros.clear(); // vacio la lista de numeros
+                    lista_intentos_objetos.clear(); // vacio la lista con las descripciones
                     listView.setAdapter(adapter);
                     btnJugarDeNuevo.setClickable(true);
                     btnJugarDeNuevo.setVisibility(View.VISIBLE);
@@ -510,9 +513,14 @@ public class JugarActivity extends AppCompatActivity {
                     contador_intentos++;
                     int cant_regulares = buscar_regulares(num_intento, num_generado);
                     int cant_correctos = buscar_correctos(num_intento, num_generado);
-                    tvNumeros.setText("Correctos: " + cant_correctos + " Regulares: " + cant_regulares);
-                    actualizar_lista(lista_intentos_descripcion, num_intento + " --> Correctos: " + cant_correctos + " Regulares: " + cant_regulares); // agrego el intento a la lista
-                    actualizar_lista(lista_intentos, num_intento);
+                    //tvNumeros.setText("Correctos: " + cant_correctos + " Regulares: " + cant_regulares);
+                    //lista_intentos_objetos.add( num_intento + " --> Correctos: " + cant_correctos + " Regulares: " + cant_regulares); // agrego el intento a la lista
+                    lista_intentos_numeros.add(num_intento);
+                    //listView.setAdapter(adapter);
+                    // con adapter personalizado
+                    String descripcion = ("Correctos = "+cant_correctos + " | Regulares = "+cant_regulares);
+                    Intento intento = new Intento(num_intento, descripcion, Integer.toString(contador_intentos));
+                    lista_intentos_objetos.add(intento);
                     listView.setAdapter(adapter);
                 }
             } else { // Si el numero ya fue ingresado
@@ -528,16 +536,12 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private int buscar_regulares(String intento, String numeroGenerado) {
-
         char num_intento;
         int contador_regulares = 0;
 
         for (int i = 0; i < intento.length(); i++) {
-
             num_intento = intento.charAt(i);
-
             for (int j = 0; j < numeroGenerado.length(); j++) {
-
                 if (num_intento == numeroGenerado.charAt(j) && j != i) { // si son iguales y NO estan en la misma posicion
                     contador_regulares++;
                 }
@@ -547,21 +551,14 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private int buscar_correctos(String intento, String numeroGenerado) {
-
         int contador_correctos = 0;
-
         for (int i = 0; i < intento.length(); i++)
-
             if (intento.charAt(i) == numeroGenerado.charAt(i)) { // si estan en la misma posicion y son iguales
-
                 contador_correctos++;
             }
         return contador_correctos;
     }
 
-    private void actualizar_lista(ArrayList<String> lista, String valor) {
-        lista.add(valor);
-    }
 
     private boolean es_repetido(ArrayList<String> lista, String valor) {
         boolean repetido = false;
