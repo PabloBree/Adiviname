@@ -171,8 +171,10 @@
         android:transcriptMode="alwaysScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
+        android:divider="@color/common_google_signin_btn_text_light_disabled"
+        android:dividerHeight="1dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/textView1_posicion" />
 
     <Button
         android:id="@+id/button_Abandonar"
@@ -206,7 +208,7 @@
         app:layout_constraintTop_toBottomOf="@+id/button_Abandonar" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView1_posicion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

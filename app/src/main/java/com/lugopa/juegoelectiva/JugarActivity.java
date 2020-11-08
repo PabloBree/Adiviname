@@ -73,6 +73,8 @@ public class JugarActivity extends AppCompatActivity {
     private ArrayList<String> lista_intentos = new ArrayList();
     private ArrayList<String> lista_intentos_descripcion = new ArrayList();
     ArrayAdapter<String> adapter;
+    //ADAPTER LISTA INTENTOS PERSONALIZADO =======================================================================================================================
+
 
     // Vibracion y sonido de botones
     private Vibrator vibe;

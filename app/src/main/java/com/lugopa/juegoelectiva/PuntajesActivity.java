@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -30,13 +29,8 @@ public class PuntajesActivity extends AppCompatActivity {
 
     ListView listView;
     private ArrayList<Puntaje> lista_puntajes = new ArrayList<>();
-    //ArrayAdapter<Puntaje> adapter;
     //ADAPTER PERSONALIZADO
-    PersonListAdapter adapter;
-
-    String dificultad;
-    String nombre;
-    String puntaje;
+    PuntajeListAdapter adapter;
 
     private Vibrator vibe;
     int duracion = 80;
@@ -66,8 +60,7 @@ public class PuntajesActivity extends AppCompatActivity {
 
         // Manejo de la lista.....
         listView = findViewById(R.id.list_view_puntajes);
-       // adapter = new ArrayAdapter<Puntaje>(getApplicationContext(), android.R.layout.simple_list_item_1, lista_puntajes);
-        adapter = new PersonListAdapter(getApplicationContext(),R.layout.adapter_puntajes_layout,lista_puntajes);
+        adapter = new PuntajeListAdapter(getApplicationContext(),R.layout.adapter_puntajes_layout,lista_puntajes);
         obtenerListaBD();
 
     }
@@ -80,16 +73,9 @@ public class PuntajesActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-//                    String nombre;
-//                    String dificultad;
-//                    String puntaje;
                     // OBTENEMOS LOS DATOS DEL PUNTAJE DE LA BASE DE DATOS
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         Puntaje p = ds.getValue(Puntaje.class);
-//                        dificultad = p.getDificultad();
-//                        nombre = p.getNombre();
-//                        puntaje = p.getPuntaje();
-
                         lista_puntajes.add(p);
                         listView.setAdapter(adapter);
                     }
