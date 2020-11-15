@@ -714,11 +714,9 @@ public class JugarActivity extends AppCompatActivity {
     }
 
     private class ReceptorResultadoDeDireccion extends ResultReceiver {
-
         ReceptorResultadoDeDireccion(Handler handler) {
             super(handler);
         }
-
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
