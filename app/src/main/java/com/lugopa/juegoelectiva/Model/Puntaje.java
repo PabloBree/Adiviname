@@ -6,12 +6,16 @@ public class Puntaje {
     private String puntaje;
     private String dificultad;
     private String ubicacion;
+    private Double latitud;
+    private Double longitud;
 
-    public Puntaje(String n, String p, String d, String u){
+    public Puntaje(String n, String p, String d, String u, Double lat, Double lon){
         this.nombre = n;
         this.puntaje = p;
         this.dificultad = d;
         this.ubicacion = u;
+        this.latitud = lat;
+        this.longitud = lon;
     }
     public Puntaje(){
     }
@@ -36,5 +40,19 @@ public class Puntaje {
         return ubicacion;
     }
 
+    public Double getLatitud() {
+        return latitud;
+    }
 
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
 }

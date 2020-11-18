@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_salir;
     private Button btn_configuracion;
     private Button btn_puntajes;
+    private Button btn_mapa;
 
     // Vibracion y sonido de botones
     private Vibrator vibe;
@@ -72,6 +73,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_mapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                soundMP.start();
+                vibe.vibrate(duracion);
+                abrir_mapa();
+            }
+        });
+
         btn_salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         btn_configuracion = findViewById(R.id.button_configuracion);
         btn_instrucciones = findViewById(R.id.button_instrucciones);
         btn_puntajes = findViewById(R.id.button_puntajes);
+        btn_mapa = findViewById(R.id.button_mapa);
         btn_salir = findViewById(R.id.button_salir);
     }
 
@@ -124,6 +135,14 @@ public class MainActivity extends AppCompatActivity {
     private void abrir_puntajes(){
         // abre activity puntajes
         Intent intent = new Intent(this, PuntajesActivity.class);
+        //intent.putExtra( lo que queramos pasar) // para pasar cosas a la activity
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    private void abrir_mapa(){
+        // abre activity jugar
+        Intent intent = new Intent(this, MapsActivity.class);
         //intent.putExtra( lo que queramos pasar) // para pasar cosas a la activity
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

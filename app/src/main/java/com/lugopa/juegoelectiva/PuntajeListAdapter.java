@@ -35,12 +35,14 @@ public class PuntajeListAdapter extends ArrayAdapter<Puntaje> {
         String nombre = getItem(position).getNombre();
         String dificultad = getItem(position).getDificultad();
         String puntaje = getItem(position).getPuntaje();
-        String ubicacion = getItem(position).getUbicacion();
+        String ubicacion = getItem(position).getUbicacion();// solo se muestra el pais
+        Double latitud = getItem(position).getLatitud(); // no se muestra
+        Double longitud = getItem(position).getLongitud(); // no se muestra
 
         String paisP = obtenerPais(ubicacion);
 
         //creamos el objeto Puntaje con la informacion
-        Puntaje p = new Puntaje(nombre, puntaje, dificultad, paisP);
+        Puntaje p = new Puntaje(nombre, puntaje, dificultad, paisP, latitud, longitud);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
